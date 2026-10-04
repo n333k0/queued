@@ -1,0 +1,91 @@
+---
+import { url } from '../lib/url';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { brand, links } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  minimal?: boolean; // checkout uses a stripped-down header, no footer
+}
+
+const {
+  title = `${brand.name} by ${brand.parent} — Design on subscription`,
+  description = 'Senior design on subscription: unlimited requests, ~48-hour delivery, one flat monthly fee. Websites, product UI, brand, decks. Pause or cancel anytime.',
+  minimal = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme={brand.theme}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content={brand.theme === 'green' ? '#0a211f' : '#0d0d0d'} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    {links.calendly && (
+      <>
+        <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
+        <script is:inline src="https://assets.calendly.com/assets/external/widget.js" async></script>
+      </>
+    )}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // ?theme=green|black previews a colour scheme; it sticks for the browser session.
+      try {
+        const t = new URLSearchParams(location.search).get('theme') || sessionStorage.getItem('theme');
+        if (t === 'green' || t === 'black') {
+          document.documentElement.dataset.theme = t;
+          sessionStorage.setItem('theme', t);
+        }
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] btn-primary">Skip to content</a>
+    <Header minimal={minimal} />
+    <main id="main">
+      <slot />
+    </main>
+    {!minimal && <Footer />}
+
+    <script is:inline define:vars={{ calendly: links.calendly }}>
+      // "Book a call" buttons: open the Calendly popup when a link is configured,
+      // otherwise fall through to the #book section.
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-call]');
+        if (btn && calendly && window.Calendly) {
+          e.preventDefault();
+          window.Calendly.initPopupWidget({ url: calendly });
+        }
+      });
+    </script>
+    <script>
+      // Scroll reveal. Elements are visible without JS; see global.css.
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px' },
+      );
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

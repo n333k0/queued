@@ -1,0 +1,35 @@
+---
+import { benefits } from '../data/site';
+
+// Small line icons, one per benefit (same order as data).
+const icons = [
+  'M4 5h6v14H4zM14 5h6v8h-6z', // board
+  'M12 3v18M7 7h7a3 3 0 0 1 0 6H10a3 3 0 0 0 0 6h7', // fixed rate
+  'M13 2 4 14h7l-1 8 9-12h-7z', // fast
+  'm12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z', // quality
+  'M4 12h16M12 4v16', // flexible
+  'M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z', // yours
+];
+---
+
+<section id="benefits" class="border-t border-white/10 bg-pine-950 py-24 sm:py-32">
+  <div class="wrap">
+    <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end" data-reveal>
+      <div>
+        <p class="label text-spark">Membership benefits</p>
+        <h2 class="display mt-4 text-[clamp(40px,6vw,80px)]">It’s “you’ll never go back” <span class="accent text-spark">better.</span></h2>
+      </div>
+      <p class="max-w-sm text-[16px] text-paper/60">Replaces unreliable freelancers and expensive agencies with one flat monthly fee, and designs delivered so fast you won’t want to go anywhere else.</p>
+    </div>
+
+    <div class="mt-14 grid gap-px overflow-hidden rounded-[28px] border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
+      {benefits.map((b, i) => (
+        <div class="bg-pine-950 p-8" data-reveal>
+          <svg class="text-spark" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d={icons[i]} /></svg>
+          <h3 class="mt-8 text-[22px] font-medium tracking-tight">{b.title}</h3>
+          <p class="mt-3 text-[15px] leading-relaxed text-paper/60">{b.body}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

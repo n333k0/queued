@@ -1,0 +1,89 @@
+---
+import { url } from '../lib/url';
+import ParentLogo from './ParentLogo.astro';
+import { brand, plan, spotsOpen, capacity } from '../data/site';
+
+// Device shots and design work: /work = our projects, /placeholder = stand-ins to replace.
+const tiles = [
+  { src: '/placeholder/laptop-typing.webp', w: 'w-[240px] sm:w-[300px]', h: 'h-[300px] sm:h-[380px]' },
+  { src: '/placeholder/brand-packaging.webp', w: 'w-[200px] sm:w-[250px]', h: 'h-[260px] sm:h-[340px]' },
+  { src: '/placeholder/tablet-method.webp', w: 'w-[260px] sm:w-[340px]', h: 'h-[300px] sm:h-[400px]' },
+  { src: '/work/1red-wide.webp', w: 'w-[340px] sm:w-[460px]', h: 'h-[220px] sm:h-[280px]' },
+  { src: '/placeholder/phone-hands.webp', w: 'w-[220px] sm:w-[280px]', h: 'h-[240px] sm:h-[300px]' },
+  { src: '/placeholder/ad-banner.webp', w: 'w-[340px] sm:w-[440px]', h: 'h-[180px] sm:h-[230px]' },
+  { src: '/work/tokni.webp', w: 'w-[240px] sm:w-[320px]', h: 'h-[300px] sm:h-[380px]' },
+  { src: '/placeholder/merch-box.webp', w: 'w-[220px] sm:w-[270px]', h: 'h-[220px] sm:h-[270px]' },
+  { src: '/work/perfect-body-wide.webp', w: 'w-[360px] sm:w-[450px]', h: 'h-[240px] sm:h-[300px]' },
+  { src: '/placeholder/tablet-founder.webp', w: 'w-[220px] sm:w-[280px]', h: 'h-[260px] sm:h-[340px]' },
+];
+const loop = [...tiles, ...tiles];
+---
+
+<section class="relative overflow-hidden pt-[88px] sm:pt-[116px]">
+  <div class="wrap relative text-center">
+    <a href={url('/#pricing')} class="chip mx-auto border-white/15 bg-white/5 text-paper/80 hover:border-spark/60">
+      <span class="dot"></span>
+      {spotsOpen} of {capacity.total} member spots open
+    </a>
+
+    <h1 class="display mx-auto mt-8 max-w-[14ch] text-[clamp(48px,9vw,128px)]">
+      Your design team. <span class="accent text-spark">On subscription.</span>
+    </h1>
+
+    <p class="mx-auto mt-7 max-w-[620px] text-[18px] leading-relaxed text-paper/75 sm:text-[20px]">
+      Websites, product UI, brand, decks and ads. Request as much as you want, get it in about 48 hours. One flat monthly fee. Pause or cancel anytime.
+    </p>
+
+    <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <a href={url('/#pricing')} class="btn-primary h-14 px-8 text-[16px]">
+        Start today
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" stroke="currentColor" stroke-width="1.6" /></svg>
+      </a>
+      <a href={url('/#book')} data-call class="btn-ghost h-14 px-8 text-[16px]">Book a 15-min call</a>
+    </div>
+
+    <ul class="label mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-paper/50">
+      <li>Unlimited requests</li>
+      <li aria-hidden="true">/</li>
+      <li>~48h delivery</li>
+      <li aria-hidden="true">/</li>
+      <li>Pause anytime</li>
+      <li aria-hidden="true">/</li>
+      <li>{plan.priceLabel}{plan.period}</li>
+    </ul>
+
+    <a href={brand.parentUrl} class="mt-7 inline-flex items-center gap-2 text-white/90 transition hover:text-white" aria-label={`${brand.parentLine} ${brand.parent}`}>
+      <span class="font-sans text-[14px] leading-none text-paper/55">{brand.parentLine}</span>
+      <ParentLogo class="h-[14px]" />
+    </a>
+  </div>
+
+  <div class="relative mt-16 sm:mt-20" aria-label="Recent work">
+    <div class="flex w-max items-end gap-4 animate-marquee hover:[animation-play-state:paused]">
+      {loop.map((t, i) => (
+        <div class:list={['shrink-0 overflow-hidden rounded-[22px] bg-pine-800', t.w, t.h]} aria-hidden={i >= tiles.length ? 'true' : undefined}>
+          <img class="size-full object-cover" src={url(t.src)} alt="" loading={i < 5 ? 'eager' : 'lazy'} />
+        </div>
+      ))}
+    </div>
+    <div class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-pine-900 sm:w-40" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-pine-900 sm:w-40" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- Facts strip -->
+<section class="mt-16 border-y border-white/10 sm:mt-24">
+  <div class="wrap grid grid-cols-2 divide-white/10 md:grid-cols-4 md:divide-x">
+    {[
+      ['Unlimited', 'Requests and revisions.'],
+      ['~48 hours', 'Average delivery per request.'],
+      ['Pause anytime', 'Unused days wait for you.'],
+      ['100% yours', 'Every file, every pixel.'],
+    ].map(([k, v]) => (
+      <div class="px-2 py-8 md:px-8">
+        <p class="text-[22px] font-medium tracking-tight sm:text-[26px]">{k}</p>
+        <p class="mt-1 text-[14px] text-paper/55">{v}</p>
+      </div>
+    ))}
+  </div>
+</section>

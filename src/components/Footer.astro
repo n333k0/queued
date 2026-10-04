@@ -1,0 +1,64 @@
+---
+import { url } from '../lib/url';
+import Logo from './Logo.astro';
+import ParentLogo from './ParentLogo.astro';
+import { brand, plan, links } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-white/10 bg-pine-950 pt-20 pb-10">
+  <div class="wrap">
+    <div class="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div>
+        <Logo />
+        <p class="mt-4 max-w-xs text-[15px] text-paper/60">Senior design on subscription. Pause or cancel anytime.</p>
+        <p class="label mt-6 text-paper/40">{plan.priceLabel}{plan.period} · ~48h delivery</p>
+        <p class="mt-8 flex items-center gap-2 text-paper/70"><span class="label text-paper/40">A product by</span><ParentLogo class="h-[16px]" /></p>
+      </div>
+      <div>
+        <p class="label text-paper/40">Queued</p>
+        <ul class="mt-4 space-y-2 text-[15px] text-paper/80">
+          <li><a class="hover:text-spark" href={url('/#benefits')}>Benefits</a></li>
+          <li><a class="hover:text-spark" href={url('/#work')}>Work</a></li>
+          <li><a class="hover:text-spark" href={url('/#pricing')}>Pricing</a></li>
+          <li><a class="hover:text-spark" href={url('/#faq')}>FAQ</a></li>
+          <li><a class="hover:text-spark" href={links.portal}>Login</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="label text-paper/40">RemotoLabs products</p>
+        <ul class="mt-4 space-y-2 text-[15px] text-paper/80">
+          <li><span class="text-paper">queued.</span> <span class="text-paper/45">Design on subscription</span></li>
+          <li><a class="hover:text-spark" href={brand.sibling.url}>shipped.</a> <span class="text-paper/45">Websites, fixed price</span></li>
+        </ul>
+      </div>
+      <div>
+        <p class="label text-paper/40">Talk to a human</p>
+        <ul class="mt-4 space-y-2 text-[15px] text-paper/80">
+          <li><a class="hover:text-spark" href={url('/#book')} data-call>Book a 15-min call</a></li>
+          <li><a class="hover:text-spark" href={`mailto:${brand.email}`}>{brand.email}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <p id="footer-word" class="display mt-24 select-none whitespace-nowrap text-[clamp(64px,22vw,300px)] leading-[0.8] pb-[0.22em] text-white/[0.06]" aria-hidden="true"><span>{brand.name.toLowerCase()}.</span></p>
+
+    <div class="mt-6 flex flex-col justify-between gap-3 border-t border-white/10 pt-6 text-[13px] text-paper/40 sm:flex-row">
+      <p>© {year} {brand.parent}. {brand.name} is a {brand.parent} product. Every design is 100% yours.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Size the watermark so it spans the content width exactly.
+  const word = document.getElementById('footer-word');
+  if (word) {
+    const fit = () => {
+      const span = word.firstElementChild as HTMLElement;
+      word.style.fontSize = '100px';
+      word.style.fontSize = `${(100 * word.clientWidth) / span.offsetWidth}px`;
+    };
+    document.fonts.ready.then(fit);
+    addEventListener('resize', fit);
+  }
+</script>
