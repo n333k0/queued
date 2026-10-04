@@ -1,0 +1,193 @@
+---
+// Pricing page: Superside's pricing-page structure, sized for a small senior studio.
+import Layout from '../layouts/Layout.astro';
+import { url } from '../lib/url';
+import { plan, links, brand, spotsOpen, capacity } from '../data/site';
+
+const ways = [
+  {
+    name: 'Membership',
+    best: 'For steady, varied design needs',
+    price: plan.priceLabel,
+    unit: '/month',
+    points: ['One request in progress at a time', '~48h average delivery', 'Pause anytime, unused days banked', 'Unlimited brands, up to 3 users'],
+    cta: 'Join today',
+    href: links.checkout,
+    featured: true,
+  },
+  {
+    name: 'Team',
+    best: 'For teams shipping every week',
+    price: '$' + (plan.price + plan.lanePrice).toLocaleString('en-US'),
+    unit: '/month',
+    points: ['Two requests in progress at once', 'A dedicated lead designer', 'Priority queue and Slack channel', 'Monthly design review call'],
+    cta: 'Book a call',
+    href: url('/#book'),
+    call: true,
+  },
+  {
+    name: 'Projects',
+    best: 'For one-time, high-stakes launches',
+    price: 'Fixed',
+    unit: ' price',
+    points: ['Fixed scope, fixed timeline', 'Websites from 5 business days', 'Launch campaigns and rebrands', 'Delivered by shipped., our sister product'],
+    cta: 'See shipped.',
+    href: brand.sibling.url,
+  },
+];
+
+const included = [
+  'Senior designers and creative direction',
+  'Websites built in Framer',
+  'Product UI/UX and design systems',
+  'Brand, social, ads, decks and email',
+  'Short motion for ads and social',
+  'Your own request board',
+  'Unlimited revisions',
+  'Every file is 100% yours',
+];
+
+const teams = [
+  { title: 'Launch & campaign creative', who: 'For founders and marketing leads', body: 'Landing pages, ad sets and social that ship at the speed of your launch plan.', img: '/placeholder/pricing-social.webp' },
+  { title: 'Product & UI', who: 'For product teams', body: 'Flows, dashboards and design systems, handed over in clean Figma your developers will thank you for.', img: '/placeholder/pricing-product.webp' },
+  { title: 'Decks & sales collateral', who: 'For sales and fundraising', body: 'Pitch decks, one-pagers and reports that make the room lean in.', img: '/placeholder/pricing-print.webp' },
+  { title: 'Brand & motion', who: 'For brands with something to say', body: 'Identities, guidelines and short motion that keep everything you put out consistent.', img: '/placeholder/pricing-video.webp' },
+];
+
+const stats = [
+  ['~48h', 'average delivery per request'],
+  ['3', 'ways to work, one team'],
+  [`${capacity.total}`, 'members at a time, max'],
+  ['100%', 'of files owned by you'],
+];
+
+const faq = [
+  { q: 'How do I know which way to work is right for me?', a: 'Most teams start with a Membership. If you regularly have two things in flight, choose Team. If you need one defined thing, like a website, a Project through shipped. is cheaper. Not sure? Book a 15-minute call.' },
+  { q: 'Is there a minimum commitment?', a: 'No. Memberships are month to month. Pause when it’s quiet, cancel anytime.' },
+  { q: 'What happens if I don’t use the whole month?', a: 'Pause it. Billing runs in 31-day cycles and unused days are banked for when you come back.' },
+  { q: 'What if I need more than one request at a time?', a: 'Add a second lane for +$2,995/month (the Team plan). You can drop back to one lane next cycle.' },
+  { q: 'What’s included in onboarding?', a: 'Your request board within the hour, a short async kickoff questionnaire and, if you want one, a 15-minute call. Your first request starts the same day.' },
+  { q: 'Can I start with a project instead of a subscription?', a: 'Yes. Fixed-scope projects run through shipped., our sister product, at a fixed price and timeline. Plenty of clients start there and join afterwards.' },
+  { q: 'How do you use AI?', a: 'Human-led, with AI behind the scenes for research, exploration and production. Senior people make every creative decision.' },
+  { q: 'Are there refunds?', a: 'Not loving it after the first week? You get 75% back. After that there are no refunds, and completed work isn’t refunded.' },
+];
+---
+
+<Layout title={`Pricing · ${brand.name} by ${brand.parent}`}>
+  <!-- Hero: text left, photo right -->
+  <section class="pt-[96px] sm:pt-[112px]">
+    <div class="wrap grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <p class="label border-b border-white/20 pb-5 text-paper/70">Pricing</p>
+        <h1 class="display mt-8 t-h2">Your design backlog, <span class="accent text-spark">cleared every week.</span></h1>
+        <p class="mt-6 max-w-lg text-[20px] leading-snug text-paper/85">One subscription, three ways to work.</p>
+        <p class="mt-4 max-w-lg text-[16px] leading-relaxed text-paper/60">A small senior team with AI behind the scenes. No hiring, no retainers, no proposals. Start this week, pause when it’s quiet.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#ways" class="btn-primary h-12 px-6">See plans</a>
+          <a href={url('/#book')} data-call class="btn-ghost h-12 px-6">Book a 15-min call</a>
+        </div>
+        <p class="label mt-6 flex items-center gap-2 text-paper/50"><span class="dot"></span>{spotsOpen} of {capacity.total} member spots open</p>
+      </div>
+      <div class="overflow-hidden rounded-[8px] bg-pine-800">
+        <img src={url('/placeholder/pricing-hero.webp')} alt="A design team at work" class="aspect-[4/5] w-full object-cover lg:aspect-square" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Three ways -->
+  <section id="ways" class="py-24 sm:py-28">
+    <div class="wrap">
+      <h2 class="display t-h2">One subscription, <span class="accent text-spark">three ways to work.</span></h2>
+      <p class="mt-5 max-w-xl text-[17px] text-paper/60">Start flexible, scale to a team, or bring us a one-off project. Every path is the same senior people.</p>
+
+      <div class="mt-12 grid gap-px overflow-hidden rounded-[8px] border border-white/10 bg-white/10 lg:grid-cols-3">
+        {ways.map((w) => (
+          <article class:list={['flex flex-col p-8 sm:p-10', w.featured ? 'bg-pine-800' : 'bg-pine-900']}>
+            <div class="flex items-center justify-between">
+              <h3 class="text-[28px] font-medium tracking-tight">{w.name}</h3>
+              {w.featured && <span class="chip border-0 bg-spark text-ink">Most popular</span>}
+            </div>
+            <p class="mt-2 text-[15px] text-paper/55">{w.best}</p>
+            <p class="mt-8"><span class="display text-[48px]">{w.price}</span><span class="text-[16px] text-paper/50">{w.unit}</span></p>
+            <ul class="mt-8 space-y-3 border-t border-white/10 pt-8 text-[15px]">
+              {w.points.map((p) => (
+                <li class="flex gap-3"><span class="mt-[9px] size-1.5 shrink-0 rounded-full bg-spark"></span>{p}</li>
+              ))}
+            </ul>
+            <a href={w.href} data-call={w.call ? '' : undefined} class:list={['mt-auto pt-10']}>
+              <span class:list={['w-full', w.featured ? 'btn-primary' : 'btn-ghost']}>{w.cta}</span>
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-px grid gap-x-10 gap-y-4 rounded-b-[8px] bg-pine-900 p-8 sm:grid-cols-2 sm:p-10 lg:grid-cols-4">
+        <p class="label text-paper/45 sm:col-span-2 lg:col-span-4">Included in every plan</p>
+        {included.map((i) => <p class="flex gap-3 text-[15px] text-paper/85"><span class="text-spark">✓</span>{i}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Teams -->
+  <section class="border-t border-white/10 py-24 sm:py-28">
+    <div class="wrap">
+      <h2 class="display t-h2">A team built around <span class="accent text-spark">your biggest needs.</span></h2>
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {teams.map((t) => (
+          <article>
+            <div class="overflow-hidden rounded-[8px] bg-pine-800"><img src={url(t.img)} alt="" loading="lazy" class="aspect-[4/5] w-full object-cover" /></div>
+            <p class="label mt-5 text-spark">{t.who}</p>
+            <h3 class="mt-2 text-[22px] font-medium tracking-tight">{t.title}</h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-paper/60">{t.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="border-t border-white/10 py-24 sm:py-28">
+    <div class="wrap">
+      <h2 class="display t-h2">Senior craft or AI speed? <span class="accent text-spark">Both.</span></h2>
+      <p class="mt-5 max-w-xl text-[17px] text-paper/60">AI does the legwork behind the scenes. People make the calls that matter.</p>
+      <div class="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-[8px] border border-white/10 bg-white/10 lg:grid-cols-4">
+        {stats.map(([n, l]) => (
+          <div class="bg-pine-900 p-8"><p class="display text-[56px] text-spark">{n}</p><p class="mt-3 text-[15px] text-paper/60">{l}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="border-t border-white/10 py-24 sm:py-28">
+    <div class="wrap grid gap-12 lg:grid-cols-[1fr_2fr]">
+      <h2 class="display t-h2">Frequently asked <span class="accent text-spark">questions.</span></h2>
+      <div class="divide-y divide-white/10 border-y border-white/10">
+        {faq.map((f) => (
+          <details>
+            <summary class="flex items-center justify-between gap-6 py-5 text-[18px] font-medium hover:text-spark">
+              {f.q}
+              <span class="faq-plus grid size-8 shrink-0 place-items-center rounded-full border border-white/15 text-[18px] text-paper/70 transition">+</span>
+            </summary>
+            <p class="max-w-2xl pb-6 text-[16px] leading-relaxed text-paper/65">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Close -->
+  <section class="wrap pb-24">
+    <div class="grid overflow-hidden rounded-[8px] bg-spark text-ink lg:grid-cols-2">
+      <div class="p-8 sm:p-14">
+        <h2 class="display t-h2">Your team’s <span class="accent">design team.</span></h2>
+        <p class="mt-5 max-w-md text-[17px] text-ink/70">Queue it. We’ll ship it. Pause or cancel anytime.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={links.checkout} class="btn-ink">Join today</a>
+          <a href={url('/#book')} data-call class="btn-line-ink">Book a 15-min call</a>
+        </div>
+      </div>
+      <img src={url('/placeholder/pricing-video.webp')} alt="" loading="lazy" class="h-full min-h-[280px] w-full object-cover" />
+    </div>
+  </section>
+</Layout>
