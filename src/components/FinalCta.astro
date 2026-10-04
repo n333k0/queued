@@ -7,9 +7,10 @@ import { url } from '../lib/url';
   <div class="relative overflow-hidden rounded-[36px] bg-spark px-6 py-20 text-center text-ink sm:py-28">
     <img class="absolute right-[-36px] top-[-30px] size-[110px] rotate-6 rounded-[20px] object-cover sm:size-[170px] md:right-[-60px] md:top-[-40px] md:size-[260px] md:rounded-[28px]" src={url('/work/tokni.webp')} alt="" loading="lazy" />
     <img class="absolute bottom-[-36px] left-[-30px] size-[100px] -rotate-6 rounded-[20px] object-cover sm:size-[150px] md:bottom-[-50px] md:left-[-40px] md:size-[220px] md:rounded-[28px]" src={url('/placeholder/brand-packaging.webp')} alt="" loading="lazy" />
-    <div class="relative">
+    <div class="relative @container">
       <p class="label text-ink/60">Subscribe. Request. Receive.</p>
-      <h2 class="display mx-auto mt-6 max-w-[16ch] t-big"><span class="block">Queue it.</span> <span class="accent block">We’ll ship it.</span></h2>
+      <!-- one line from sm up (max 115px), sized to the card so it never overflows; same size as handled -->
+      <h2 class="display mx-auto mt-6 text-[48px] sm:whitespace-nowrap sm:text-[min(115px,9.9cqw)]"><span class="block sm:inline">Queue it.</span> <span class="accent block sm:inline">We’ll ship it.</span></h2>
       <div class="mx-auto mt-10 flex max-w-sm flex-col items-center justify-center gap-3 sm:max-w-none sm:flex-row">
         <a href={url('/#pricing')} class="btn-ink h-14 px-8 text-[16px] btn-wide">Start today</a>
         <a href={url('/#book')} data-call class="btn-line-ink h-14 px-8 text-[16px] btn-wide">Book a 15-min call</a>
