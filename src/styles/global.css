@@ -40,7 +40,7 @@
 }
 
 /* Themes / styles. Default is set in src/data/site.ts (brand.theme). Preview any
-   with ?theme=void | black | green on a URL. Names: Void, Graphite, Pine (see ../_design/STYLES.md). */
+   with ?theme=ember | void | black | green on a URL. Names: Ember, Void, Graphite, Pine (see ../_design/STYLES.md). */
 /* Style "Void" (default since 2026-10-04): near-pure black like the lead funnel, flat. */
 :root,
 [data-theme="void"] {
@@ -52,6 +52,19 @@
   --tone-500: #444444;
   --tone-ink: #070707;
   --tone-mist: #9a9a9a;
+}
+
+/* Style "Ember" (queued default since 2026-10-04): pure black page like shipped's
+   Pitch; cards and panels carry a faint warm tint toward queued's orange. */
+[data-theme="ember"] {
+  --tone-950: #000000;
+  --tone-900: #000000;
+  --tone-800: #0f0805;
+  --tone-700: #1a0e09;
+  --tone-600: #221713;
+  --tone-500: #45332b;
+  --tone-ink: #070403;
+  --tone-mist: #a09690;
 }
 
 /* Style "Graphite": the first black version. */
