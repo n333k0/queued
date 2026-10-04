@@ -8,7 +8,7 @@ import { scope, scopeMore } from '../data/site';
     <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end" data-reveal>
       <div>
         <p class="label text-pine-500">What we design</p>
-        <h2 class="display mt-4 text-[clamp(40px,6vw,80px)]">Apps, websites, brands <span class="accent">& more.</span></h2>
+        <h2 class="display mt-4 t-h2">Apps, websites, brands <span class="accent">& more.</span></h2>
       </div>
       <p class="max-w-sm text-[16px] text-ink/60">Everything a growing company needs, under one subscription. If it’s on a screen or a slide, put it in the queue.</p>
     </div>
@@ -17,8 +17,7 @@ import { scope, scopeMore } from '../data/site';
       {scope.map((s, i) => (
         <article class:list={['group relative overflow-hidden rounded-[22px] bg-ink', i === 0 ? 'col-span-2 row-span-2 aspect-square lg:aspect-auto' : 'aspect-[4/5]']} data-reveal>
           <img src={url(s.img)} alt="" loading="lazy" class="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-[1.04]" />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"></div>
-          <h3 class="absolute inset-x-5 bottom-5 text-[18px] font-medium tracking-tight text-paper sm:text-[22px]">{s.title}</h3>
+          <h3 class="absolute bottom-4 left-4 right-4 w-fit rounded-full bg-pine-950 px-4 py-2 text-[14px] font-medium tracking-tight text-paper sm:text-[15px]">{s.title}</h3>
         </article>
       ))}
       <article class="col-span-2 flex min-h-[200px] flex-col justify-between gap-6 rounded-[22px] bg-ink p-6 text-paper" data-reveal>

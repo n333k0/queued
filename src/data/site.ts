@@ -5,7 +5,7 @@ export const brand = {
   parent: 'RemotoLabs', // logo: public/brand/remotolabs.png
   parentUrl: '#', // TODO: RemotoLabs website URL
   parentLine: 'A design subscription by',
-  theme: 'black' as 'black' | 'green',
+  theme: 'void' as 'void' | 'black' | 'green', // style: void = Void (default), black = Graphite, green = Pine
   email: 'hello@queued.studio', // TODO: real inbox
   sibling: { name: 'Shipped', url: 'https://n333k0.github.io/shipped/', line: 'Just need a website? Fixed price, 10 days.' },
 };
