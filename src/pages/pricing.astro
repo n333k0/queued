@@ -88,7 +88,7 @@ const faq = [
         </div>
         <p class="label mt-6 flex items-center gap-2 text-paper/50"><span class="dot"></span>{spotsOpen} of {capacity.total} member spots open</p>
       </div>
-      <div class="overflow-hidden rounded-[8px] bg-pine-800">
+      <div class="overflow-hidden rounded-[24px] bg-pine-800">
         <img src={url('/placeholder/pricing-hero.webp')} alt="A design team at work" class="aspect-[4/5] w-full object-cover lg:aspect-square" />
       </div>
     </div>
@@ -100,7 +100,7 @@ const faq = [
       <h2 class="display t-h2">One subscription, <span class="accent text-spark">three ways to work.</span></h2>
       <p class="mt-5 max-w-xl text-[17px] text-paper/60">Start flexible, scale to a team, or bring us a one-off project. Every path is the same senior people.</p>
 
-      <div class="mt-12 grid gap-px overflow-hidden rounded-[8px] border border-white/10 bg-white/10 lg:grid-cols-3">
+      <div class="mt-12 grid gap-px overflow-hidden rounded-[24px] border border-white/10 bg-white/10 lg:grid-cols-3">
         {ways.map((w) => (
           <article class:list={['flex flex-col p-8 sm:p-10', w.featured ? 'bg-pine-800' : 'bg-pine-900']}>
             <div class="flex items-center justify-between">
@@ -135,7 +135,7 @@ const faq = [
       <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {teams.map((t) => (
           <article>
-            <div class="overflow-hidden rounded-[8px] bg-pine-800"><img src={url(t.img)} alt="" loading="lazy" class="aspect-[4/5] w-full object-cover" /></div>
+            <div class="overflow-hidden rounded-[24px] bg-pine-800"><img src={url(t.img)} alt="" loading="lazy" class="aspect-[4/5] w-full object-cover" /></div>
             <p class="label mt-5 text-spark">{t.who}</p>
             <h3 class="mt-2 text-[22px] font-medium tracking-tight">{t.title}</h3>
             <p class="mt-2 text-[15px] leading-relaxed text-paper/60">{t.body}</p>
@@ -150,7 +150,7 @@ const faq = [
     <div class="wrap">
       <h2 class="display t-h2">Senior craft or AI speed? <span class="accent text-spark">Both.</span></h2>
       <p class="mt-5 max-w-xl text-[17px] text-paper/60">AI does the legwork behind the scenes. People make the calls that matter.</p>
-      <div class="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-[8px] border border-white/10 bg-white/10 lg:grid-cols-4">
+      <div class="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-[24px] border border-white/10 bg-white/10 lg:grid-cols-4">
         {stats.map(([n, l]) => (
           <div class="bg-pine-900 p-8"><p class="display text-[56px] text-spark">{n}</p><p class="mt-3 text-[15px] text-paper/60">{l}</p></div>
         ))}
@@ -178,7 +178,7 @@ const faq = [
 
   <!-- Close -->
   <section class="wrap pb-24">
-    <div class="grid overflow-hidden rounded-[8px] bg-spark text-ink lg:grid-cols-2">
+    <div class="grid overflow-hidden rounded-[24px] bg-spark text-ink lg:grid-cols-2">
       <div class="p-8 sm:p-14">
         <h2 class="display t-h2">Your team’s <span class="accent">design team.</span></h2>
         <p class="mt-5 max-w-md text-[17px] text-ink/70">Queue it. We’ll ship it. Pause or cancel anytime.</p>
