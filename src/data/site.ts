@@ -83,7 +83,7 @@ export const benefits = [
 ];
 
 export const scope = [
-  { title: 'Websites & landing pages', img: '/work/1red-square.webp' },
+  { title: 'Websites & landing pages', img: '/generated/halden-tablet.webp' },
   { title: 'Product UI/UX', img: '/placeholder/laptop-typing.webp' },
   { title: 'Framer development', img: '/work/tokni.webp' },
   { title: 'Brand & identity', img: '/placeholder/brand-packaging.webp' },
