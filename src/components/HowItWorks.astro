@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import { steps, board, plan } from '../data/site';
 
 const tagColor: Record<string, string> = {
@@ -26,29 +27,50 @@ const tagColor: Record<string, string> = {
           <h3 class="mt-5 text-[30px] font-medium tracking-tight">{s.title}</h3>
           <p class="mt-3 text-[16px] leading-relaxed text-paper/60">{s.body}</p>
 
-          <div class="mt-8 rounded-2xl border border-white/10 bg-pine-800 p-4 text-[13px]" aria-hidden="true">
+          <div class="mt-8 h-[188px] overflow-hidden rounded-2xl border border-white/10 bg-pine-800 p-4 text-[13px]" aria-hidden="true">
             {s.ui === 'subscribe' && (
-              <div>
+              <div class="anim-sub relative" data-anim="subscribe" data-state="0">
                 <div class="flex items-center justify-between"><span class="text-paper/60">{plan.name}</span><span class="font-medium">{plan.priceLabel}<span class="text-paper/45">{plan.period}</span></span></div>
-                <div class="mt-3 flex items-center justify-between rounded-xl bg-spark px-3 py-2 font-semibold text-ink"><span>Start today</span><span>→</span></div>
-                <p class="label mt-3 text-paper/40">Board ready in under an hour</p>
+                <div class="sub-btn relative mt-3 flex h-10 items-center justify-between rounded-xl bg-spark px-3 font-semibold text-ink transition duration-300">
+                  <span class="sub-label">Start today</span><span class="sub-arrow">→</span>
+                </div>
+                <div class="sub-ready mt-3 flex items-center gap-2 rounded-xl bg-white/[0.05] px-3 py-2 transition duration-500">
+                  <span class="grid size-5 place-items-center rounded-full bg-spark text-[11px] text-ink">✓</span>
+                  <span>Your board is ready</span>
+                </div>
+                <p class="label mt-3 text-paper/40">Invite sent · under an hour</p>
+                <svg class="sub-cursor absolute h-5 w-5 drop-shadow transition-all duration-700 ease-out" viewBox="0 0 24 24" fill="white" stroke="black" stroke-width="1"><path d="M5 3l14 8-6 2-3 6z" /></svg>
               </div>
             )}
             {s.ui === 'request' && (
-              <div class="space-y-2">
-                {['Pricing page redesign', 'Q4 investor deck', 'Instagram set × 6'].map((t, i) => (
-                  <div class="flex items-center gap-2 rounded-xl bg-white/[0.05] px-3 py-2"><span class="font-mono text-[11px] text-paper/40">{i + 1}</span>{t}</div>
-                ))}
-                <div class="rounded-xl border border-dashed border-white/20 px-3 py-2 text-paper/40">+ Add a request</div>
+              <div data-anim="request">
+                <div class="mb-2 flex items-center justify-between text-paper/50"><span class="label">Your queue</span><span class="label"><span class="req-count">3</span> requests</span></div>
+                <ul class="req-list space-y-1.5">
+                  {['Pricing page redesign', 'Q4 investor deck', 'Instagram set × 6'].map((t, i) => (
+                    <li class="req flex items-center justify-between gap-2 rounded-xl bg-white/[0.05] px-3 py-2">
+                      <span class="truncate">{t}</span>
+                      <span class:list={['req-status shrink-0 rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em]', i === 0 ? 'bg-spark/15 text-spark' : 'bg-white/10 text-paper/50']}>{i === 0 ? 'In progress' : 'Queued'}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
             {s.ui === 'receive' && (
-              <div>
-                <div class="flex items-center gap-2"><span class="grid size-5 place-items-center rounded-full bg-spark text-[11px] text-ink">✓</span><span>Onboarding flow delivered</span></div>
-                <div class="mt-3 grid grid-cols-3 gap-1.5">
-                  {[1, 2, 3].map(() => <div class="aspect-[3/4] rounded-md bg-gradient-to-b from-white/15 to-white/5"></div>)}
+              <div data-anim="receive" data-state="0">
+                <div class="flex items-center gap-2">
+                  <span class="rcv-icon grid size-5 place-items-center rounded-full border border-white/20 text-[11px] transition duration-300">✓</span>
+                  <span class="rcv-title">Onboarding flow</span>
+                  <span class="rcv-pct ml-auto font-mono text-[11px] text-paper/45">0%</span>
                 </div>
-                <p class="label mt-3 text-paper/40">2 days · Figma + prototype</p>
+                <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10"><div class="rcv-bar h-full w-0 rounded-full bg-spark"></div></div>
+                <div class="mt-3 grid grid-cols-3 gap-1.5">
+                  {['/work/tokni.webp', '/placeholder/brand-packaging.webp', '/work/1red.webp'].map((src, i) => (
+                    <div class="rcv-thumb aspect-[4/3] overflow-hidden rounded-md bg-white/5 transition duration-500" style={`transition-delay:${i * 150}ms`}>
+                      <img src={url(src)} alt="" class="size-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+                <p class="rcv-meta label mt-3 text-paper/40">Designing…</p>
               </div>
             )}
           </div>
@@ -86,3 +108,118 @@ const tagColor: Record<string, string> = {
     <p class="mt-5 text-center text-[15px] text-paper/50">Brief it however you like: a doc, a Figma link, a wireframe or a two-minute Loom.</p>
   </div>
 </section>
+
+<style is:global>
+  /* Subscribe: cursor travels to the button, button confirms, board-ready row appears. */
+  .anim-sub .sub-cursor { left: 85%; top: 120%; opacity: 0; }
+  .anim-sub[data-state='1'] .sub-cursor { left: 70%; top: 40%; opacity: 1; }
+  .anim-sub[data-state='2'] .sub-cursor { left: 70%; top: 40%; opacity: 1; transform: scale(0.85); }
+  .anim-sub[data-state='2'] .sub-btn { transform: scale(0.97); filter: brightness(0.92); }
+  .anim-sub[data-state='3'] .sub-btn { background: var(--color-paper); }
+  .anim-sub[data-state='3'] .sub-cursor { left: 95%; top: 120%; opacity: 0; }
+  .anim-sub .sub-ready { opacity: 0; transform: translateY(8px); }
+  .anim-sub[data-state='3'] .sub-ready { opacity: 1; transform: none; }
+
+  /* Request: new cards slide in at the top. */
+  .req-enter { animation: req-in 0.5s cubic-bezier(.2,.7,.2,1); }
+  @keyframes req-in { from { opacity: 0; transform: translateY(-10px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+  /* Receive: thumbnails pop in once the bar completes. */
+  [data-anim='receive'] .rcv-thumb { opacity: 0; transform: scale(0.9); }
+  [data-anim='receive'][data-state='done'] .rcv-thumb { opacity: 1; transform: none; }
+  [data-anim='receive'][data-state='done'] .rcv-icon { background: var(--color-spark); color: var(--color-ink); border-color: transparent; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anim-sub .sub-cursor { display: none; }
+    .anim-sub .sub-ready, [data-anim='receive'] .rcv-thumb { opacity: 1; transform: none; }
+  }
+</style>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  // Run a looping animation only while it's on screen.
+  function whenVisible(el: Element, loop: (alive: () => boolean) => Promise<void>) {
+    let visible = false;
+    let running = false;
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible && !running) {
+        running = true;
+        (async () => {
+          while (visible) await loop(() => visible);
+          running = false;
+        })();
+      }
+    }).observe(el);
+  }
+
+  // 01 Subscribe
+  const sub = document.querySelector<HTMLElement>('[data-anim="subscribe"]');
+  if (sub) {
+    const label = sub.querySelector('.sub-label')!;
+    const arrow = sub.querySelector('.sub-arrow')!;
+    const set = (state: string, text: string, icon: string) => {
+      sub.dataset.state = state;
+      label.textContent = text;
+      arrow.textContent = icon;
+    };
+    if (reduce) set('3', '✓ You’re in', '');
+    else
+      whenVisible(sub, async () => {
+        set('0', 'Start today', '→'); await sleep(900);
+        set('1', 'Start today', '→'); await sleep(800);
+        set('2', 'Processing…', '◌'); await sleep(1100);
+        set('3', '✓ You’re in', ''); await sleep(2600);
+      });
+  }
+
+  // 02 Request
+  const req = document.querySelector<HTMLElement>('[data-anim="request"]');
+  if (req && !reduce) {
+    const list = req.querySelector('.req-list')!;
+    const count = req.querySelector('.req-count')!;
+    const pool = ['Logo refresh', 'Email template', 'Ad set × 4', 'Onboarding flow', 'Pitch one-pager', 'Landing page hero', 'Dashboard UI', 'Brand guide'];
+    let n = 3;
+    let k = 0;
+    const statusCls = 'req-status shrink-0 rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em]';
+    whenVisible(req, async () => {
+      await sleep(1800);
+      // the in-progress item is delivered, the next one starts
+      const items = list.querySelectorAll('.req');
+      items[0]?.remove();
+      const next = list.querySelector('.req-status');
+      if (next) { next.className = statusCls + ' bg-spark/15 text-spark'; next.textContent = 'In progress'; }
+      // a new request lands at the bottom of the queue
+      const li = document.createElement('li');
+      li.className = 'req req-enter flex items-center justify-between gap-2 rounded-xl bg-white/[0.05] px-3 py-2';
+      li.innerHTML = `<span class="truncate">${pool[k++ % pool.length]}</span><span class="${statusCls} bg-white text-ink">New</span>`;
+      list.appendChild(li);
+      setTimeout(() => { const s = li.querySelector('.req-status'); if (s && s.textContent === 'New') { s.className = statusCls + ' bg-white/10 text-paper/50'; s.textContent = 'Queued'; } }, 1200);
+      count.textContent = String(++n);
+    });
+  }
+
+  // 03 Receive
+  const rcv = document.querySelector<HTMLElement>('[data-anim="receive"]');
+  if (rcv) {
+    const bar = rcv.querySelector<HTMLElement>('.rcv-bar')!;
+    const pct = rcv.querySelector('.rcv-pct')!;
+    const meta = rcv.querySelector('.rcv-meta')!;
+    const title = rcv.querySelector('.rcv-title')!;
+    const jobs = ['Onboarding flow', 'Pitch deck v2', 'Ad set × 4', 'Pricing page'];
+    let j = 0;
+    const done = () => { rcv.dataset.state = 'done'; bar.style.width = '100%'; pct.textContent = '100%'; meta.textContent = 'Delivered · 1d 22h'; };
+    if (reduce) done();
+    else
+      whenVisible(rcv, async () => {
+        rcv.dataset.state = '0';
+        title.textContent = jobs[j++ % jobs.length];
+        meta.textContent = 'Designing…';
+        for (let p = 0; p <= 100; p += 4) { bar.style.width = p + '%'; pct.textContent = p + '%'; await sleep(55); }
+        done();
+        await sleep(2800);
+      });
+  }
+</script>

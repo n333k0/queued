@@ -91,16 +91,19 @@ export const scope = [
   { title: 'Decks & reports', img: '/placeholder/tablet-founder.webp' },
   { title: 'Merch & packaging', img: '/placeholder/merch-box.webp' },
 ];
-export const scopeMore = ['Logos', 'Email', 'Icons', 'Brand guides', 'Display ads', 'Social media', 'Mobile apps', 'Dashboards', 'Design systems', 'Print', 'Presentations', 'Illustrations'];
+export const scopeMore = ['Short motion', 'Logos', 'Email', 'Icons', 'Brand guides', 'Display ads', 'Social media', 'Mobile apps', 'Dashboards', 'Design systems', 'Print', 'Presentations', 'Illustrations'];
 
 // Recent work. Real projects first; placeholder device shots fill the rest.
 export const work = [
   { title: 'Content platform', industry: 'Media / SaaS', tag: 'Web + Framer', count: '14 requests', focus: 'Editorial homepage + CMS', img: '/placeholder/tablet-method.webp' },
   { title: 'Tokn1', industry: 'RWA exchange', tag: 'Web + brand', count: '11 requests', focus: 'Launch site + design system', img: '/work/tokni.webp' },
+  { title: 'Bakery launch', industry: 'Food & beverage', tag: 'Social video', count: '6 requests', focus: 'Launch ads, 3 formats', img: '/placeholder/v-donuts.mp4' },
   { title: 'Perfect Body', industry: 'Nutrition course', tag: 'Landing + social', count: '9 requests', focus: 'Course launch + ad set', img: '/work/perfect-body.webp' },
-  { title: 'App launch', industry: 'Consumer tech', tag: 'Product UI', count: '7 requests', focus: 'Onboarding + waitlist', img: '/placeholder/phone-hands.webp' },
-  { title: 'Venture fund', industry: 'Venture capital', tag: 'Deck + web', count: '5 requests', focus: 'Fund deck + founder intake', img: '/placeholder/tablet-founder.webp' },
+  { title: 'Sublim', industry: 'Beverage brand', tag: 'Brand + packaging', count: '8 requests', focus: 'Identity + can design', img: '/placeholder/brand-packaging.webp' },
+  { title: 'Spring campaign', industry: 'Home & lifestyle', tag: 'Motion', count: '5 requests', focus: 'Hero loop + social cuts', img: '/placeholder/v-sponge.mp4' },
   { title: '1RED', industry: 'AI sales & support', tag: 'Web + product', count: '12 requests', focus: 'SmartBot site + dashboard', img: '/work/1red.webp' },
+  { title: 'Omakase bar', industry: 'Hospitality', tag: 'Social + menu', count: '7 requests', focus: 'Menu, posters, Instagram', img: '/placeholder/g-sushi.webp' },
+  { title: 'Custom drop', industry: 'Sports brand', tag: 'Ad creative', count: '10 requests', focus: 'Product drop campaign', img: '/placeholder/v-ball.mp4' },
 ];
 
 export const compare: { label: string; values: [string, string, string, string] }[] = [
@@ -151,7 +154,7 @@ export const faq: { group: string; items: { q: string; a: string }[] }[] = [
       { q: 'Who are the designers?', a: 'A small senior team at RemotoLabs. Every request goes through senior creative direction. We don’t outsource, and we cap the number of members so quality stays high.' },
       { q: 'What programs do you design in?', a: 'Figma for design, Framer for websites. Your files and source are always shared with you.' },
       { q: 'How does website development work?', a: 'Framer development is included and treated like any other request. When the site is done it moves to your account, and it’s yours. You don’t need a membership to keep it running. Webflow on request.' },
-      { q: 'Are there requests you don’t support?', a: 'Yes: 3D modelling, video and animation, complex packaging engineering, long print (books, magazines) and InDesign documents.' },
+      { q: 'Are there requests you don’t support?', a: 'Yes: 3D modelling, long-form video production, complex packaging engineering, long print (books, magazines) and InDesign documents. Short motion for ads and social is in.' },
       { q: 'Do I own the work?', a: 'Yes. Everything we design for you is 100% yours, including source files.' },
     ],
   },
