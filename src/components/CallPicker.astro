@@ -38,8 +38,8 @@ const fmtDay = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'short', mo
         <p class="text-[16px] font-medium">Select a day</p>
         <div class="mt-4 grid grid-cols-5 gap-2" role="list">
           {days.map((x, i) => (
-            <button type="button" data-day={fmtDay(x.d)} disabled={!x.open} class:list={['day rounded-xl border px-1 py-2 text-center text-[13px] transition', x.open ? 'border-white/15 hover:border-spark' : 'cursor-not-allowed border-transparent text-paper/25', i === 0 && 'border-spark bg-spark/10']}>
-              <span class="block font-mono text-[10px] uppercase text-paper/45">{x.d.toLocaleDateString('en-US', { weekday: 'short' })}</span>
+            <button type="button" data-day={fmtDay(x.d)} disabled={!x.open} data-sel={i === 0 ? '' : undefined} class:list={['day group rounded-xl border px-1 py-2 text-center text-[13px] transition data-sel:border-spark data-sel:bg-spark data-sel:text-white', x.open ? 'border-white/15 hover:border-spark' : 'cursor-not-allowed border-transparent text-paper/25']}>
+              <span class="block font-mono text-[10px] uppercase text-paper/45 group-data-sel:text-white/80">{x.d.toLocaleDateString('en-US', { weekday: 'short' })}</span>
               <span class="block text-[16px] font-medium">{x.d.getDate()}</span>
             </button>
           ))}
@@ -61,8 +61,7 @@ const fmtDay = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'short', mo
     const label = root.querySelector('.day-label');
     root.querySelectorAll<HTMLButtonElement>('.day:not([disabled])').forEach((b) =>
       b.addEventListener('click', () => {
-        root.querySelectorAll('.day').forEach((x) => x.classList.remove('border-spark', 'bg-spark/10'));
-        b.classList.add('border-spark', 'bg-spark/10');
+        root.querySelectorAll('.day').forEach((x) => x.toggleAttribute('data-sel', x === b));
         if (label) label.textContent = b.dataset.day ?? '';
         root.querySelectorAll<HTMLAnchorElement>('.slot').forEach((s) => {
           s.href = s.href.replace(/body=.*/, `body=I'd%20like%20${encodeURIComponent(`${b.dataset.day} at ${s.dataset.slot}`)}.`);
