@@ -7,7 +7,8 @@ const { class: className = '' } = Astro.props;
 ---
 
 <div class:list={['q-shader pointer-events-none', className]} aria-hidden="true">
-  <canvas class="absolute inset-0 size-full"></canvas>
+  <!-- screen blend (like shipped) keeps the canvas on the normal compositing path, so its darks always match the page -->
+  <canvas class="absolute inset-0 size-full mix-blend-screen"></canvas>
   <!-- short fade into the next section -->
   <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-b from-transparent to-pine-900"></div>
 </div>
