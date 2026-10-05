@@ -29,8 +29,9 @@ const { class: className = '' } = Astro.props;
   precision highp float;
   precision highp int;
   uniform vec2 u_res;      // canvas size in device pixels
-  uniform float u_t;       // seconds
+  uniform float u_t;       // animation clock (seconds, advances faster while hovered)
   uniform vec2 u_mouse;    // pointer in shader space (smoothed)
+  uniform float u_grain;   // separate clock for the grain re-seed
   uniform float u_hover;   // 0..1, eases in while the pointer is over the hero
   uniform vec3 u_bg, u_c1, u_c2, u_c3, u_c4;
   out vec4 o;
@@ -59,7 +60,7 @@ const { class: className = '' } = Astro.props;
     vec2 fc = gl_FragCoord.xy;
     float asp = u_res.x / u_res.y;
     vec2 p = (fc - .5 * u_res) / u_res.y;          // y in [-.5,.5], x scaled by aspect
-    float t = u_t * (1. + .8 * u_hover);
+    float t = u_t; // already eased in JS (speed changes never jump the animation)
 
     // organic shapes: warp the plane with two octaves of slow noise
     vec2 q = p;
@@ -68,7 +69,7 @@ const { class: className = '' } = Astro.props;
 
     // pointer: the plane bulges toward the cursor nearby, so the blobs visibly reach for it
     vec2 dm = p - u_mouse;
-    q -= dm * .35 * u_hover * exp(-dot(dm, dm) / .05);
+    q -= dm * .22 * u_hover * exp(-dot(dm, dm) / .05);
 
     // two clusters anchored in the bottom-left and top-right corners, wandering around them.
     // portrait (phones): smaller blobs
@@ -99,7 +100,7 @@ const { class: className = '' } = Astro.props;
     I *= mix(.2, 1., smoothstep(.5, .36, p.y)); // soft fade under the nav so its links stay readable
 
     // grain: fresh per device pixel, re-seeded ~24 times a second (film cadence)
-    uint frame = uint(floor(u_t * 24.));
+    uint frame = uint(floor(u_grain * 24.));
     float g1 = rnd(uvec3(uvec2(fc), frame));
     float g2 = rnd(uvec3(uvec2(fc) + 7919u, frame));
     // stochastic edge: transitions dissolve into speckle instead of a smooth ramp
@@ -134,7 +135,7 @@ const { class: className = '' } = Astro.props;
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     const U = (n: string) => gl.getUniformLocation(prog, n);
-    const uRes = U('u_res'), uT = U('u_t'), uMouse = U('u_mouse'), uHover = U('u_hover');
+    const uGrain = U('u_grain'), uRes = U('u_res'), uT = U('u_t'), uMouse = U('u_mouse'), uHover = U('u_hover');
     // queued palette: brand orange, deep ember, warm peach, hot red-orange; page off-black
     gl.uniform3fv(U('u_bg'), hex('#0b0b0b'));
     gl.uniform3fv(U('u_c1'), hex('#ff6a3d'));
@@ -149,7 +150,12 @@ const { class: className = '' } = Astro.props;
       const r = canvas.getBoundingClientRect();
       target = [((e as PointerEvent).clientX - r.left - r.width / 2) / r.height, -((e as PointerEvent).clientY - r.top - r.height / 2) / r.height];
     });
-    hero.addEventListener('pointerenter', () => (hoverTarget = 1));
+    hero.addEventListener('pointerenter', (e) => {
+      const r = canvas.getBoundingClientRect();
+      target = [((e as PointerEvent).clientX - r.left - r.width / 2) / r.height, -((e as PointerEvent).clientY - r.top - r.height / 2) / r.height];
+      if (hover < .02) mouse = [...target]; // start from where the cursor came in, no sweep across
+      hoverTarget = 1;
+    });
     hero.addEventListener('pointerleave', () => (hoverTarget = 0));
 
     const resize = () => {
@@ -158,16 +164,18 @@ const { class: className = '' } = Astro.props;
       if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
     };
 
-    let visible = true, raf = 0, last = performance.now(), time = 20; // start mid-motion, not from a cold pose
+    let visible = true, raf = 0, last = performance.now(), time = 20, grainT = 0; // start mid-motion, not from a cold pose
     const frame = (now: number) => {
       raf = 0;
       const dt = Math.min((now - last) / 1000, .1); last = now;
-      time += dt;
-      mouse = mouse.map((m, i) => m + (target[i] - m) * .2); // fast follow
-      hover += (hoverTarget - hover) * .12;
+      time += dt * (1 + .6 * hover); // integrate the speed, so hovering eases the pace up instead of jumping
+      grainT += dt;
+      mouse = mouse.map((m, i) => m + (target[i] - m) * .07); // soft follow
+      hover += (hoverTarget - hover) * .035; // ~1s ease in/out
       resize();
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uT, time);
+      gl.uniform1f(uGrain, grainT);
       gl.uniform2f(uMouse, mouse[0], mouse[1]);
       gl.uniform1f(uHover, hover);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
