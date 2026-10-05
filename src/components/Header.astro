@@ -24,7 +24,7 @@ const nav = [
     <div class="flex items-center gap-3">
       <a href={integ.portal} class="hidden text-[14px] text-paper/70 transition hover:text-paper md:inline">Login</a>
       <a href={overlay ? '#book' : url('/#book')} data-call class="btn-ghost hidden h-10 px-5 text-[14px] sm:inline-flex">Book a call</a>
-      <a href={overlay ? '#ways' : url('/#pricing')} class="btn-primary h-10 px-5 text-[14px]">See pricing</a>
+      <a href={Astro.url.pathname.replace(/\/$/, '').endsWith('/subscriptions') ? '#ways' : url('/#pricing')} class="btn-primary h-10 px-5 text-[14px]">See pricing</a>
       <button type="button" class="menu-btn grid size-10 shrink-0 place-items-center rounded-full border border-white/20 lg:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="m-nav">
             <span class="burger" aria-hidden="true"><i></i><i></i></span>
           </button>
