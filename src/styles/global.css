@@ -125,7 +125,7 @@
 @utility accent { @apply font-serif italic font-normal tracking-[-0.01em]; }
 @utility btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-6 h-12 text-[15px] font-semibold transition duration-200 whitespace-nowrap; }
 @utility btn-primary { @apply btn bg-spark text-ink hover:bg-white; }
-@utility btn-ghost { @apply btn border border-white/25 text-paper hover:border-white hover:bg-white/5; }
+@utility btn-ghost { @apply btn border border-white/12 text-paper hover:border-white/30 hover:bg-white/5; }
 @utility btn-ink { @apply btn bg-ink text-paper hover:bg-pine-700; }
 @utility btn-line-ink { @apply btn border border-ink/20 text-ink hover:border-ink; }
 @utility dot { @apply inline-block size-2 rounded-full bg-spark animate-pulse-dot; }

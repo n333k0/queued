@@ -20,13 +20,13 @@ const [lead, ...rest] = testimonials;
           <span class="block text-[16px] font-medium">{lead.who}</span>
           <span class="block text-[14px] text-paper/50">{lead.role}</span>
         </span>
-        <span class="chip border-white/15 text-paper/60">{lead.meta}</span>
+        <span class="chip border-transparent bg-white/[0.06] text-paper/60">{lead.meta}</span>
       </figcaption>
     </figure>
 
     <div class="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {rest.map((t) => (
-        <figure class="flex flex-col rounded-[24px] border border-white/10 bg-white/[0.03] p-6" data-reveal>
+        <figure class="flex flex-col rounded-[24px] bg-white/[0.04] p-6" data-reveal>
           <p class="label text-spark">{t.meta}</p>
           <blockquote class="mt-5 text-[18px] leading-snug">“{t.quote}”</blockquote>
           <figcaption class="mt-auto pt-6 text-[14px]">

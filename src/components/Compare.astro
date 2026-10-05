@@ -10,10 +10,10 @@ import { compare, compareHeads } from '../data/site';
       <p class="mt-6 max-w-xl text-[18px] text-paper/65">Hiring takes months. Agencies take weeks. Freelancers take a chance. A membership takes about a minute.</p>
     </div>
 
-    <div class="mt-14 overflow-x-auto rounded-[28px] border border-white/10" data-reveal>
+    <div class="mt-14 overflow-x-auto rounded-[28px] bg-white/[0.04]" data-reveal>
       <table class="w-full min-w-[760px] text-left text-[15px]">
         <thead>
-          <tr class="border-b border-white/10">
+          <tr class="border-b border-white/[0.06]">
             <th class="p-5" scope="col"><span class="sr-only">Compare</span></th>
             {compareHeads.map((h) => <th scope="col" class="label p-5 font-normal text-paper/45">{h}</th>)}
             <th scope="col" class="bg-spark p-5 text-[18px] font-semibold tracking-tight text-ink">queued.</th>
@@ -21,10 +21,10 @@ import { compare, compareHeads } from '../data/site';
         </thead>
         <tbody>
           {compare.map((r) => (
-            <tr class="border-b border-white/5 last:border-0">
+            <tr class="border-b border-white/[0.06] last:border-0">
               <th scope="row" class="p-5 font-normal text-paper/60">{r.label}</th>
               {r.values.slice(0, 3).map((v) => <td class="p-5 text-paper/45">{v}</td>)}
-              <td class="bg-spark/10 p-5 font-medium">{r.values[3]}</td>
+              <td class="bg-white/[0.06] p-5 font-medium">{r.values[3]}</td>
             </tr>
           ))}
         </tbody>
