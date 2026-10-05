@@ -1,6 +1,8 @@
 ---
 import { benefits } from '../data/site';
 
+const ticker = ['Unlimited requests', 'Fixed monthly rate', '~48-hour delivery', 'Senior quality', 'Pause anytime'];
+
 // Small line icons, one per benefit (same order as data).
 const icons = [
   'M4 5h6v14H4zM14 5h6v8h-6z', // board
@@ -12,9 +14,27 @@ const icons = [
 ];
 ---
 
-<section id="benefits" class="bg-pine-950 pt-12 pb-24 sm:pt-14 sm:pb-32">
+<section id="benefits" class="scroll-mt-[52px] bg-pine-950 pt-8 pb-24 sm:scroll-mt-[72px] sm:pt-7 sm:pb-32">
   <div class="wrap">
-    <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end" data-reveal>
+    <!-- Section divider: accent block with the membership promises on a loop. The Benefits link lands here. -->
+    <div class="overflow-hidden rounded-[28px] bg-spark px-4 py-7 text-ink sm:px-8 sm:py-9" role="img" aria-label={ticker.join(', ')}>
+      <div class="ticker overflow-hidden">
+      <div class="flex w-max animate-ticker" aria-hidden="true">
+        {[0, 1].map(() => (
+          <div class="flex shrink-0 items-center">
+            {ticker.map((t) => (
+              <span class="flex items-center whitespace-nowrap text-[32px] font-medium tracking-[-0.02em] sm:text-[48px] lg:text-[56px]">
+                <span class="px-6 sm:px-8">{t}</span>
+                <svg viewBox="0 0 24 24" class="size-5 sm:size-7" fill="currentColor"><path d="M12 0c.6 6.4 5.6 11.4 12 12-6.4.6-11.4 5.6-12 12-.6-6.4-5.6-11.4-12-12C6.4 11.4 11.4 6.4 12 0z" /></svg>
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col justify-between gap-6 sm:mt-14 md:flex-row md:items-end" data-reveal>
       <div>
         <p class="label text-spark">Membership benefits</p>
         <h2 class="display mt-4 t-h2">It’s “you’ll never go back” <span class="accent text-spark">better.</span></h2>
@@ -24,11 +44,11 @@ const icons = [
 
     <div class="mt-14 grid gap-px overflow-hidden rounded-[28px] border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-3" data-reveal>
       {benefits.map((b, i) => (
-        <div class="flex gap-4 bg-pine-950 p-5 sm:block sm:p-8">
-          <svg class="mt-0.5 size-6 shrink-0 text-spark sm:mt-0 sm:size-7" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d={icons[i]} /></svg>
+        <div class="flex gap-4 bg-pine-950 p-5 sm:gap-5 sm:px-7 sm:py-6">
+          <svg class="mt-0.5 size-6 shrink-0 text-spark" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d={icons[i]} /></svg>
           <div>
-            <h3 class="text-[18px] font-medium tracking-tight sm:mt-8 sm:text-[22px]">{b.title}</h3>
-            <p class="mt-1.5 text-[14px] leading-relaxed text-paper/60 sm:mt-3 sm:text-[15px]">{b.body}</p>
+            <h3 class="text-[18px] font-medium tracking-tight sm:text-[20px]">{b.title}</h3>
+            <p class="mt-1.5 text-[14px] leading-relaxed text-paper/60 sm:text-[15px]">{b.body}</p>
           </div>
         </div>
       ))}
