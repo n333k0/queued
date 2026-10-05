@@ -14,6 +14,7 @@
 }
 
 @theme {
+  --color-black: #0b0b0b; /* off-black: every bg-black / from-black follows the page colour */
   --color-spark: #ff6a3d;
   --color-spark-dim: #e2552b;
   --color-paper: #f3f1ea;
@@ -57,10 +58,10 @@
 /* Style "Ember" (queued default since 2026-10-04): pure black page like shipped's
    Pitch; cards and panels carry a faint warm tint toward queued's orange. */
 [data-theme="ember"] {
-  --tone-950: #000000;
-  --tone-900: #000000;
-  --tone-800: #0f0805;
-  --tone-700: #1a0e09;
+  --tone-950: #0b0b0b;
+  --tone-900: #0b0b0b;
+  --tone-800: #140c09;
+  --tone-700: #1d110c;
   --tone-600: #221713;
   --tone-500: #45332b;
   --tone-ink: #070403;
