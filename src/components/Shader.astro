@@ -118,65 +118,88 @@ const { class: className = '' } = Astro.props;
   }`;
 
   const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+  const MAX_PX = 2_000_000; // render cap: ~1.4× density on a 1440px retina hero, plenty for the grain
+  const FPS = 30;           // the blobs drift slowly and the grain re-seeds at 24/s, so 30fps looks the same
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   for (const box of document.querySelectorAll<HTMLElement>('.q-shader')) {
-    const canvas = box.querySelector('canvas')!;
-    const gl = canvas.getContext('webgl2', { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: 'high-performance' });
-    if (!gl) { box.classList.add('no-gl'); continue; }
-
-    const sh = (type: number, src: string) => {
-      const s = gl.createShader(type)!; gl.shaderSource(s, src); gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s) ?? 'shader');
-      return s;
-    };
-    let prog: WebGLProgram;
-    try {
-      prog = gl.createProgram()!;
-      gl.attachShader(prog, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FRAG));
-      gl.linkProgram(prog); gl.useProgram(prog);
-    } catch { box.classList.add('no-gl'); continue; }
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-    const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    const U = (n: string) => gl.getUniformLocation(prog, n);
-    const uGrain = U('u_grain'), uRes = U('u_res'), uT = U('u_t'), uMouse = U('u_mouse'), uHover = U('u_hover');
-    // queued palette: brand orange, deep ember, warm peach, hot red-orange; page off-black
-    gl.uniform3fv(U('u_bg'), hex('#0b0b0b'));
-    gl.uniform3fv(U('u_c1'), hex('#ff6a3d'));
-    gl.uniform3fv(U('u_c2'), hex('#c4300f'));
-    gl.uniform3fv(U('u_c3'), hex('#ffa06e'));
-    gl.uniform3fv(U('u_c4'), hex('#ff4a24'));
-
-    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hero = box.closest('section') ?? box;
-    let mouse = [0, 0], target = [0, 0], hover = 0, hoverTarget = 0;
-    hero.addEventListener('pointermove', (e) => {
-      const r = canvas.getBoundingClientRect();
-      target = [((e as PointerEvent).clientX - r.left - r.width / 2) / r.height, -((e as PointerEvent).clientY - r.top - r.height / 2) / r.height];
-    });
+    // pointer + clock live outside the GL setup, so a rebuilt context picks up where it left off
+    let mouse = [0, 0], target = [0, 0], hover = 0, hoverTarget = 0, time = 20, grainT = 0; // start mid-motion
+    const toShader = (e: PointerEvent, c: HTMLCanvasElement) => {
+      const r = c.getBoundingClientRect();
+      return [(e.clientX - r.left - r.width / 2) / r.height, -(e.clientY - r.top - r.height / 2) / r.height];
+    };
+    let canvas = box.querySelector('canvas')!;
+    hero.addEventListener('pointermove', (e) => (target = toShader(e as PointerEvent, canvas)));
     hero.addEventListener('pointerenter', (e) => {
-      const r = canvas.getBoundingClientRect();
-      target = [((e as PointerEvent).clientX - r.left - r.width / 2) / r.height, -((e as PointerEvent).clientY - r.top - r.height / 2) / r.height];
+      target = toShader(e as PointerEvent, canvas);
       if (hover < .02) mouse = [...target]; // start from where the cursor came in, no sweep across
       hoverTarget = 1;
     });
     hero.addEventListener('pointerleave', () => (hoverTarget = 0));
 
+    let gl: WebGL2RenderingContext | null = null;
+    let uRes: WebGLUniformLocation | null, uT: WebGLUniformLocation | null, uMouse: WebGLUniformLocation | null, uHover: WebGLUniformLocation | null, uGrain: WebGLUniformLocation | null;
+    const init = () => {
+      gl = canvas.getContext('webgl2', { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: 'low-power' });
+      if (!gl) return false;
+      const g = gl;
+      const sh = (type: number, src: string) => {
+        const s = g.createShader(type)!; g.shaderSource(s, src); g.compileShader(s);
+        if (!g.getShaderParameter(s, g.COMPILE_STATUS)) throw new Error(g.getShaderInfoLog(s) ?? 'shader');
+        return s;
+      };
+      try {
+        const prog = g.createProgram()!;
+        g.attachShader(prog, sh(g.VERTEX_SHADER, VERT)); g.attachShader(prog, sh(g.FRAGMENT_SHADER, FRAG));
+        g.linkProgram(prog); g.useProgram(prog);
+        g.bindBuffer(g.ARRAY_BUFFER, g.createBuffer());
+        g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), g.STATIC_DRAW);
+        const loc = g.getAttribLocation(prog, 'p'); g.enableVertexAttribArray(loc); g.vertexAttribPointer(loc, 2, g.FLOAT, false, 0, 0);
+        const U = (n: string) => g.getUniformLocation(prog, n);
+        uGrain = U('u_grain'); uRes = U('u_res'); uT = U('u_t'); uMouse = U('u_mouse'); uHover = U('u_hover');
+        // queued palette: brand orange, deep ember, warm peach, hot red-orange; page off-black
+        g.uniform3fv(U('u_bg'), hex('#0b0b0b'));
+        g.uniform3fv(U('u_c1'), hex('#ff6a3d'));
+        g.uniform3fv(U('u_c2'), hex('#c4300f'));
+        g.uniform3fv(U('u_c3'), hex('#ffa06e'));
+        g.uniform3fv(U('u_c4'), hex('#ff4a24'));
+      } catch { return false; }
+      canvas.width = canvas.height = 0; // force a resize on the next frame
+      return true;
+    };
+    // Browsers cap live WebGL contexts (~16 across all tabs) and silently kill the oldest. When that
+    // happens, swap in a fresh canvas and rebuild, so the hero never stays blank.
+    const rebuild = () => {
+      const fresh = canvas.cloneNode() as HTMLCanvasElement;
+      canvas.replaceWith(fresh); canvas = fresh; watch();
+      if (!init()) box.classList.add('no-gl'); else start();
+    };
+    const watch = () => canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); stop(); setTimeout(rebuild, 300); }, { once: true });
+    watch();
+    if (!init()) { box.classList.add('no-gl'); continue; }
+
     const resize = () => {
-      const dpr = Math.min(devicePixelRatio || 1, 2); // full device resolution so the grain stays razor fine
-      const w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
-      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
+      const cw = canvas.clientWidth, ch = canvas.clientHeight;
+      const dpr = Math.min(devicePixelRatio || 1, 2, Math.sqrt(MAX_PX / Math.max(cw * ch, 1)));
+      const w = Math.round(cw * dpr), h = Math.round(ch * dpr);
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl!.viewport(0, 0, w, h); }
     };
 
-    let visible = true, raf = 0, last = performance.now(), time = 20, grainT = 0; // start mid-motion, not from a cold pose
+    let visible = true, raf = 0, last = performance.now(), drawn = 0;
     const frame = (now: number) => {
       raf = 0;
+      if (!gl || gl.isContextLost()) return;
+      if (!still && visible && !document.hidden) raf = requestAnimationFrame(frame);
+      if (!still && now - drawn < 1000 / FPS - 2) return; // hold at ~30fps
+      drawn = now;
       const dt = Math.min((now - last) / 1000, .1); last = now;
       time += dt * (1 + .6 * hover); // integrate the speed, so hovering eases the pace up instead of jumping
       grainT += dt;
-      mouse = mouse.map((m, i) => m + (target[i] - m) * .07); // soft follow
-      hover += (hoverTarget - hover) * .035; // ~1s ease in/out
+      const k = 1 - Math.pow(1 - .07, dt * 60), kh = 1 - Math.pow(1 - .035, dt * 60); // same easing as at 60fps
+      mouse = mouse.map((m, i) => m + (target[i] - m) * k); // soft follow
+      hover += (hoverTarget - hover) * kh; // ~1s ease in/out
       resize();
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uT, time);
@@ -184,11 +207,14 @@ const { class: className = '' } = Astro.props;
       gl.uniform2f(uMouse, mouse[0], mouse[1]);
       gl.uniform1f(uHover, hover);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      if (!still && visible && !document.hidden) raf = requestAnimationFrame(frame);
     };
     const start = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; };
     new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) start(); }).observe(box);
-    document.addEventListener('visibilitychange', () => { if (!document.hidden && visible) start(); });
+    // coming back to the tab (or via back/forward): rebuild if the browser dropped the context meanwhile
+    const revive = () => { if (document.hidden) return; if (!gl || gl.isContextLost()) rebuild(); else if (visible) start(); };
+    document.addEventListener('visibilitychange', revive);
+    addEventListener('pageshow', revive);
     addEventListener('resize', () => still && start());
     start();
   }
