@@ -1,0 +1,171 @@
+---
+// Hero background: our own WebGL2 shader (no library). Soft warped colour blobs in queued's oranges
+// drift around the edges on off-black; per-device-pixel film grain breaks their edges into fine
+// speckle. One blob leans toward the pointer. Pauses off-screen / in hidden tabs; one still frame
+// for reduced motion; static CSS gradient if WebGL2 is missing.
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['q-shader pointer-events-none', className]} aria-hidden="true">
+  <canvas class="absolute inset-0 size-full"></canvas>
+  <!-- short fade into the next section -->
+  <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-b from-transparent to-pine-900"></div>
+</div>
+
+<style>
+  /* fallback when WebGL2 is unavailable */
+  .q-shader.no-gl {
+    background:
+      radial-gradient(40% 50% at 8% 85%, rgb(255 106 61 / .55), transparent 70%),
+      radial-gradient(35% 45% at 92% 10%, rgb(255 140 90 / .45), transparent 70%);
+  }
+</style>
+
+<script>
+  const VERT = `#version 300 es
+  in vec2 p; void main() { gl_Position = vec4(p, 0., 1.); }`;
+
+  const FRAG = `#version 300 es
+  precision highp float;
+  precision highp int;
+  uniform vec2 u_res;      // canvas size in device pixels
+  uniform float u_t;       // seconds
+  uniform vec2 u_mouse;    // pointer in shader space (smoothed)
+  uniform float u_hover;   // 0..1, eases in while the pointer is over the hero
+  uniform vec3 u_bg, u_c1, u_c2, u_c3, u_c4;
+  out vec4 o;
+
+  // PCG hash: high-quality integer noise for the grain (no visible patterning)
+  uint pcg(uint v) { uint s = v * 747796405u + 2891336453u; uint w = ((s >> ((s >> 28u) + 4u)) ^ s) * 277803737u; return (w >> 22u) ^ w; }
+  float rnd(uvec3 v) { return float(pcg(v.x ^ pcg(v.y ^ pcg(v.z)))) / 4294967295.; }
+
+  // 2D simplex noise (Ashima / Stefan Gustavson, MIT)
+  vec3 perm(vec3 x) { return mod(((x * 34.) + 1.) * x, 289.); }
+  float snoise(vec2 v) {
+    const vec4 C = vec4(.211324865405187, .366025403784439, -.577350269189626, .024390243902439);
+    vec2 i = floor(v + dot(v, C.yy)), x0 = v - i + dot(i, C.xx);
+    vec2 i1 = x0.x > x0.y ? vec2(1, 0) : vec2(0, 1);
+    vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+    i = mod(i, 289.);
+    vec3 p = perm(perm(i.y + vec3(0, i1.y, 1)) + i.x + vec3(0, i1.x, 1));
+    vec3 m = max(.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.); m *= m; m *= m;
+    vec3 x = 2. * fract(p * C.www) - 1., h = abs(x) - .5, a0 = x - floor(x + .5);
+    m *= 1.79284291400159 - .85373472095314 * (a0 * a0 + h * h);
+    vec3 g = vec3(a0.x * x0.x + h.x * x0.y, a0.yz * x12.xz + h.yz * x12.yw);
+    return 130. * dot(m, g);
+  }
+
+  void main() {
+    vec2 fc = gl_FragCoord.xy;
+    float asp = u_res.x / u_res.y;
+    vec2 p = (fc - .5 * u_res) / u_res.y;          // y in [-.5,.5], x scaled by aspect
+    float t = u_t * (1. + .8 * u_hover);
+
+    // organic shapes: warp the plane with two octaves of slow noise
+    vec2 q = p;
+    q += .16 * vec2(snoise(p * 1.1 + vec2(0., t * .06)), snoise(p * 1.1 + vec2(5.2, -t * .05)));
+    q += .05 * vec2(snoise(p * 3. - t * .09), snoise(p * 3. + 9.1 + t * .08));
+
+    // four blobs orbiting the edges, so the centre (where the copy sits) stays mostly dark.
+    // portrait (phones): smaller blobs that keep to the top and bottom edges
+    float k = 1. - smoothstep(.6, 1.2, asp);
+    float rx = .5 * asp + mix(.08, .1, k), ry = mix(.56, .66, k);
+    float sz = mix(1., .32, k);
+    vec2 b1 = vec2(cos(t * .11 + .6) * rx, sin(t * .09 + .6) * ry);
+    vec2 b2 = vec2(cos(t * .08 + 3.4) * rx * .95, sin(t * .12 + 3.0) * ry);
+    vec2 b3 = vec2(cos(-t * .07 + 1.9) * rx * 1.05, sin(-t * .1 + 2.2) * ry * .9);
+    vec2 b4 = mix(vec2(cos(t * .05 + 5.) * rx * .7, sin(t * .06 + 4.4) * ry * .8), u_mouse, .35 * u_hover);
+    float w1 = exp(-dot(q - b1, q - b1) / (.085 * sz));
+    float w2 = exp(-dot(q - b2, q - b2) / (.07 * sz));
+    float w3 = exp(-dot(q - b3, q - b3) / (.06 * sz));
+    float w4 = exp(-dot(q - b4, q - b4) / (.045 * sz));
+    float W = w1 + w2 + w3 + w4;
+    vec3 col = (u_c1 * w1 + u_c2 * w2 + u_c3 * w3 + u_c4 * w4) / max(W, 1e-4);
+
+    // soft body with a defined shoulder (like the reference), then keep the copy area quieter
+    float I = smoothstep(.08, .95, 1. - exp(-W * 1.6));
+    float centre = smoothstep(.12, .62, length(p * vec2(.75 / max(asp, 1.) * 1.6, 1.25)));
+    I *= mix(mix(.28, .1, k), 1., centre);
+
+    // grain: fresh per device pixel, re-seeded ~24 times a second (film cadence)
+    uint frame = uint(floor(u_t * 24.));
+    float g1 = rnd(uvec3(uvec2(fc), frame));
+    float g2 = rnd(uvec3(uvec2(fc) + 7919u, frame));
+    // stochastic edge: transitions dissolve into speckle instead of a smooth ramp
+    float edge = 4. * I * (1. - I);
+    float Is = clamp(I + (g1 - .5) * .9 * edge, 0., 1.);
+    vec3 c = mix(u_bg, col, Is);
+    // fine luminance grain over everything (stronger in the light, subtle in the dark)
+    c += (g2 - .5) * mix(.018, .085, Is);
+    o = vec4(c, 1.);
+  }`;
+
+  const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+
+  for (const box of document.querySelectorAll<HTMLElement>('.q-shader')) {
+    const canvas = box.querySelector('canvas')!;
+    const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, powerPreference: 'high-performance' });
+    if (!gl) { box.classList.add('no-gl'); continue; }
+
+    const sh = (type: number, src: string) => {
+      const s = gl.createShader(type)!; gl.shaderSource(s, src); gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s) ?? 'shader');
+      return s;
+    };
+    let prog: WebGLProgram;
+    try {
+      prog = gl.createProgram()!;
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FRAG));
+      gl.linkProgram(prog); gl.useProgram(prog);
+    } catch { box.classList.add('no-gl'); continue; }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const U = (n: string) => gl.getUniformLocation(prog, n);
+    const uRes = U('u_res'), uT = U('u_t'), uMouse = U('u_mouse'), uHover = U('u_hover');
+    // queued palette: brand orange, deep ember, warm peach, hot red-orange; page off-black
+    gl.uniform3fv(U('u_bg'), hex('#0b0b0b'));
+    gl.uniform3fv(U('u_c1'), hex('#ff6a3d'));
+    gl.uniform3fv(U('u_c2'), hex('#c4300f'));
+    gl.uniform3fv(U('u_c3'), hex('#ffa06e'));
+    gl.uniform3fv(U('u_c4'), hex('#ff4a24'));
+
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hero = box.closest('section') ?? box;
+    let mouse = [0, 0], target = [0, 0], hover = 0, hoverTarget = 0;
+    hero.addEventListener('pointermove', (e) => {
+      const r = canvas.getBoundingClientRect();
+      target = [((e as PointerEvent).clientX - r.left - r.width / 2) / r.height, -((e as PointerEvent).clientY - r.top - r.height / 2) / r.height];
+    });
+    hero.addEventListener('pointerenter', () => (hoverTarget = 1));
+    hero.addEventListener('pointerleave', () => (hoverTarget = 0));
+
+    const resize = () => {
+      const dpr = Math.min(devicePixelRatio || 1, 2); // full device resolution so the grain stays razor fine
+      const w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
+    };
+
+    let visible = true, raf = 0, last = performance.now(), time = 20; // start mid-motion, not from a cold pose
+    const frame = (now: number) => {
+      raf = 0;
+      const dt = Math.min((now - last) / 1000, .1); last = now;
+      time += dt;
+      mouse = mouse.map((m, i) => m + (target[i] - m) * .04);
+      hover += (hoverTarget - hover) * .05;
+      resize();
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+      gl.uniform1f(uT, time);
+      gl.uniform2f(uMouse, mouse[0], mouse[1]);
+      gl.uniform1f(uHover, hover);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      if (!still && visible && !document.hidden) raf = requestAnimationFrame(frame);
+    };
+    const start = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } };
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) start(); }).observe(box);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && visible) start(); });
+    addEventListener('resize', () => still && start());
+    start();
+  }
+</script>

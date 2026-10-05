@@ -1,6 +1,7 @@
 ---
 import { url } from '../lib/url';
 import ParentLogo from './ParentLogo.astro';
+import Shader from './Shader.astro';
 import { brand, plan, spotsOpen, capacity } from '../data/site';
 
 // Device shots and design work: /work = our projects, /placeholder = stand-ins to replace.
@@ -24,6 +25,8 @@ const loop = [...tiles, ...tiles];
 ---
 
 <section class="relative overflow-hidden pt-[88px] sm:pt-[116px]">
+  <!-- grainy ember shader behind the copy and the reel -->
+  <Shader class="absolute inset-0" />
   <div class="wrap relative text-center">
     <a href={url('/#pricing')} class="chip mx-auto border-white/15 bg-white/5 text-paper/80 hover:border-spark/60">
       <span class="dot"></span>
@@ -62,7 +65,7 @@ const loop = [...tiles, ...tiles];
     </a>
   </div>
 
-  <div class="relative mt-12 sm:mt-14" aria-label="Recent work">
+  <div class="reel relative mt-12 sm:mt-14" aria-label="Recent work">
     <div class="flex w-max items-end gap-4 animate-marquee hover:[animation-play-state:paused]">
       {loop.map((t, i) => (
         <div class:list={['shrink-0 overflow-hidden rounded-[22px] bg-pine-800', t.w, t.h]} aria-hidden={i >= tiles.length ? 'true' : undefined}>
@@ -74,8 +77,6 @@ const loop = [...tiles, ...tiles];
         </div>
       ))}
     </div>
-    <div class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-pine-900 sm:w-40" aria-hidden="true"></div>
-    <div class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-pine-900 sm:w-40" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -95,3 +96,8 @@ const loop = [...tiles, ...tiles];
     ))}
   </div>
 </section>
+
+<style>
+  /* reel edges fade out softly so the shader shows through, no dark bars */
+  .reel { -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent); }
+</style>
