@@ -106,17 +106,21 @@ const { class: className = '' } = Astro.props;
     // stochastic edge: transitions dissolve into speckle instead of a smooth ramp
     float edge = 4. * I * (1. - I);
     float Is = clamp(I + (g1 - .5) * .9 * edge, 0., 1.);
-    vec3 c = mix(u_bg, col, Is);
-    // fine luminance grain over everything (stronger in the light, subtle in the dark)
-    c += (g2 - .5) * mix(.018, .085, Is);
-    o = vec4(c, 1.);
+    // transparent output (premultiplied): the off-black behind is the page's own CSS colour, so the
+    // dark never shifts tone when the browser changes how it composites the canvas (e.g. on scroll)
+    float n = (g2 - .5) * mix(.018, .085, Is);
+    vec3 c = col * Is + n * Is;
+    float a = Is;
+    float speck = max(n, 0.) * (1. - Is);             // faint light grain in the dark areas
+    c += speck; a += speck;
+    o = vec4(clamp(c, 0., 1.), clamp(a, 0., 1.));
   }`;
 
   const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
 
   for (const box of document.querySelectorAll<HTMLElement>('.q-shader')) {
     const canvas = box.querySelector('canvas')!;
-    const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, powerPreference: 'high-performance' });
+    const gl = canvas.getContext('webgl2', { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: 'high-performance' });
     if (!gl) { box.classList.add('no-gl'); continue; }
 
     const sh = (type: number, src: string) => {
