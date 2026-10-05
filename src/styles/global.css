@@ -114,7 +114,7 @@
 /* Container follows Superside's system: 16px / 32px margins, fluid until 1280px,
    1216px content from 1280px, 1608px content from 1650px (layout cap 1920px). */
 /* Type scale stepped like Superside's (36→48→60→72 for sections). */
-@utility t-hero { @apply text-[42px] md:text-[64px] lg:text-[80px] xl:text-[96px] 3xl:text-[112px]; }
+@utility t-hero { @apply text-[48px] md:text-[74px] lg:text-[92px] xl:text-[110px] 3xl:text-[129px]; }
 @utility t-h2 { @apply text-[34px] md:text-[48px] lg:text-[60px] xl:text-[72px]; }
 @utility t-big { @apply text-[40px] md:text-[60px] lg:text-[80px] xl:text-[96px]; }
 @utility t-quote { @apply text-[30px] md:text-[40px] lg:text-[52px] xl:text-[60px]; }
@@ -146,7 +146,8 @@
 
 details > summary { list-style: none; cursor: pointer; }
 details > summary::-webkit-details-marker { display: none; }
-details[open] .faq-plus { transform: rotate(45deg); }
+details[open]:not([data-closing]) .faq-plus { transform: rotate(45deg); }
+.faq-plus { transition: transform .38s cubic-bezier(.2,.7,.2,1), color .2s, border-color .2s; }
 
 /* Header: full-width bar at the top, shrinks into a floating pill once you scroll. */
 .site-header { transition: background-color .4s ease, border-color .4s ease, padding .4s ease; }
