@@ -14,7 +14,7 @@ import { compare, compareHeads } from '../data/site';
       <table class="w-full min-w-[760px] text-left text-[15px]">
         <thead>
           <tr class="border-b border-white/[0.06]">
-            <th class="p-5" scope="col"><span class="sr-only">Compare</span></th>
+            <th class="py-5 pl-7 pr-5 sm:pl-9" scope="col"><span class="sr-only">Compare</span></th>
             {compareHeads.map((h) => <th scope="col" class="label p-5 font-normal text-paper/45">{h}</th>)}
             <th scope="col" class="bg-spark p-5 text-[18px] font-semibold tracking-tight text-ink">queued.</th>
           </tr>
@@ -22,7 +22,7 @@ import { compare, compareHeads } from '../data/site';
         <tbody>
           {compare.map((r) => (
             <tr class="border-b border-white/[0.06] last:border-0">
-              <th scope="row" class="p-5 font-normal text-paper/60">{r.label}</th>
+              <th scope="row" class="py-5 pl-7 pr-5 font-normal text-paper/60 sm:pl-9">{r.label}</th>
               {r.values.slice(0, 3).map((v) => <td class="p-5 text-paper/45">{v}</td>)}
               <td class="bg-white/[0.06] p-5 font-medium">{r.values[3]}</td>
             </tr>
