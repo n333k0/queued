@@ -74,7 +74,7 @@ const faq = [
 ];
 ---
 
-<Layout title={`Pricing · ${brand.name} by ${brand.parent}`}>
+<Layout title={`Subscriptions · ${brand.name} by ${brand.parent}`} overlay>
   <!-- Hero: full-bleed photo behind, big headline bottom-left (Superside-style) -->
   <section class="relative isolate flex min-h-[100svh] items-end overflow-hidden pb-12 pt-[140px] sm:pb-16">
     <img src={url('/placeholder/pricing-hero.webp')} alt="" class="absolute inset-0 -z-20 size-full object-cover object-[70%_18%]" />
@@ -187,12 +187,12 @@ const faq = [
   <!-- Close: accent block with the intro-call calendar -->
   <section id="call" class="wrap scroll-mt-24 pb-24">
     <div class="grid items-center gap-10 rounded-[40px] bg-spark p-6 text-ink sm:p-12 lg:grid-cols-[1fr_1.35fr] lg:gap-14 lg:p-14">
-      <div>
+      <div class="lg:-mt-10">
         <p class="label text-ink/60">Book a call</p>
         <h2 class="display mt-4 t-h2">Your team’s <span class="accent">design team.</span></h2>
         <p class="mt-5 max-w-md text-[17px] text-ink/70">Pick a time for a free 15-minute intro call. Or skip it and start today: queue it, we’ll ship it. Pause or cancel anytime.</p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href={links.checkout} class="btn-ink h-12 px-6">Join today</a>
+          <a href={links.checkout} class="btn-ink h-14 min-w-[240px] px-10 text-[16px]">Join today</a>
         </div>
       </div>
       <CallPicker solid />

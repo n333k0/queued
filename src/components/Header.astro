@@ -3,17 +3,17 @@ import { url } from '../lib/url';
 import Logo from './Logo.astro';
 import { links as integ, spotsOpen } from '../data/site';
 
+const { minimal = false, overlay = false } = Astro.props;
 const nav = [
   { href: '/#benefits', label: 'Benefits' },
   { href: '/#work', label: 'Work' },
   { href: '/#scope', label: 'Scope' },
-  { href: '/#pricing', label: 'Pricing' },
   { href: '/pricing/', label: 'Subscriptions' },
   { href: '/#faq', label: 'FAQ' },
 ];
 ---
 
-<header class="site-header fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-pine-900/80 backdrop-blur-xl">
+<header data-overlay={overlay ? '' : undefined} class="site-header fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-pine-900/80 backdrop-blur-xl">
   <div class="bar wrap flex h-[68px] items-center justify-between gap-6">
     <Logo />
 
@@ -23,8 +23,8 @@ const nav = [
 
     <div class="flex items-center gap-3">
       <a href={integ.portal} class="hidden text-[14px] text-paper/70 transition hover:text-paper md:inline">Login</a>
-      <a href={url('/#book')} data-call class="btn-ghost hidden h-10 px-5 text-[14px] sm:inline-flex">Book a call</a>
-      <a href={url('/#pricing')} class="btn-primary h-10 px-5 text-[14px]">See pricing</a>
+      <a href={overlay ? '#call' : url('/#book')} data-call class="btn-ghost hidden h-10 px-5 text-[14px] sm:inline-flex">Book a call</a>
+      <a href={overlay ? '#ways' : url('/#pricing')} class="btn-primary h-10 px-5 text-[14px]">See pricing</a>
       <details class="relative lg:hidden">
         <summary class="grid size-10 place-items-center rounded-full border border-white/20" aria-label="Menu">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 5h12M2 11h12" stroke="currentColor" stroke-width="1.5" /></svg>
