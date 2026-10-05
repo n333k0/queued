@@ -82,7 +82,7 @@ const tagColor: Record<string, string> = {
                             <div class="flex items-center justify-between text-[3.5px] font-semibold leading-none"><span>9:41</span><span class="h-[3px] w-[11px] rounded-full bg-black"></span><span class="flex gap-[1px]"><span class="h-[2.5px] w-[3px] rounded-[0.5px] bg-black"></span><span class="h-[2.5px] w-[1.5px] rounded-[0.5px] bg-black/40"></span></span></div>
                             <div class="mt-[4px] flex gap-[1.5px]">{[0, 1, 2].map((d) => <span class:list={['h-[1.5px] flex-1 rounded-full', d <= v ? 'bg-[#ff6a3d]' : 'bg-black/10']}></span>)}</div>
                             {v === 0 && <>
-                              <span class="mt-[5px] grid size-[9px] place-items-center rounded-[3px] bg-[#ff6a3d] text-[5px] font-bold leading-none text-white">n</span>
+                              <span class="mt-[5px] grid size-[9px] place-items-center rounded-[3px] bg-[#ff6a3d] text-[5px] font-bold leading-none text-black">n</span>
                               <p class="mt-[3px] text-[5.5px] font-semibold leading-[1.1] tracking-tight">Create your account</p>
                               <p class="mt-[1px] text-[3px] leading-tight text-black/45">Takes about a minute.</p>
                               <p class="mt-[3px] text-[2.8px] font-medium text-black/55">Email</p>
@@ -102,14 +102,14 @@ const tagColor: Record<string, string> = {
                               <div class="mt-auto grid h-[8px] place-items-center rounded-full bg-black text-[3.5px] font-medium text-white">Continue · 3</div>
                             </>}
                             {v === 2 && <>
-                              <div class="relative mx-auto mt-[8px] grid size-[16px] place-items-center rounded-full bg-[#ff6a3d] text-[7px] leading-none text-white">✓
+                              <div class="relative mx-auto mt-[8px] grid size-[16px] place-items-center rounded-full bg-[#ff6a3d] text-[7px] leading-none text-black">✓
                                 <span class="absolute -left-[5px] top-0 size-[2px] rounded-full bg-[#ffc2ad]"></span><span class="absolute -right-[4px] top-[3px] size-[1.5px] rounded-full bg-[#ff6a3d]"></span><span class="absolute -right-[6px] bottom-0 size-[2px] rounded-full bg-black/20"></span>
                               </div>
                               <p class="mt-[4px] text-center text-[5.5px] font-semibold leading-[1.1] tracking-tight">You’re all set</p>
                               <p class="mt-[1px] text-center text-[3px] leading-tight text-black/45">Your workspace is ready.</p>
                               <div class="mx-auto mt-[4px] flex -space-x-[2px]">{['#ffb199', '#c8bdff', '#9be0c4'].map((c) => <span class="size-[6px] rounded-full ring-[0.5px] ring-white" style={`background:${c}`}></span>)}</div>
                               <p class="mt-[1px] text-center text-[2.8px] text-black/45">3 teammates invited</p>
-                              <div class="mt-auto grid h-[8px] place-items-center rounded-full bg-[#ff6a3d] text-[3.5px] font-medium text-white">Get started</div>
+                              <div class="mt-auto grid h-[8px] place-items-center rounded-full bg-[#ff6a3d] text-[3.5px] font-medium text-black">Get started</div>
                             </>}
                           </div>
                         </div>
