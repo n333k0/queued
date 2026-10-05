@@ -27,27 +27,27 @@ const tagColor: Record<string, string> = {
           <h3 class="mt-5 text-[30px] font-medium tracking-tight">{s.title}</h3>
           <p class="mt-3 text-[16px] leading-relaxed text-paper/60">{s.body}</p>
 
-          <div class="mt-8 h-[200px] overflow-hidden rounded-2xl border border-white/10 bg-pine-800 p-4 text-[13px]" aria-hidden="true">
+          <div class="mt-8 h-[200px] overflow-hidden rounded-2xl border border-white/10 bg-black p-4 text-[13px]" aria-hidden="true">
             {s.ui === 'subscribe' && (
-              <div class="anim-sub relative" data-anim="subscribe" data-state="0">
+              <div class="anim-sub relative flex h-full flex-col" data-anim="subscribe" data-state="0">
                 <div class="flex items-center justify-between"><span class="text-paper/60">{plan.name}</span><span class="font-medium">{plan.priceLabel}<span class="text-paper/45">{plan.period}</span></span></div>
                 <div class="sub-btn relative mt-3 flex h-10 items-center justify-between rounded-xl bg-spark px-3 font-semibold text-ink transition duration-300">
                   <span class="sub-label">Start today</span><span class="sub-arrow">→</span>
                 </div>
-                <div class="sub-ready mt-3 flex items-center gap-2 rounded-xl bg-white/[0.05] px-3 py-2 transition duration-500">
+                <div class="sub-ready mt-3 flex h-10 items-center gap-2 rounded-xl bg-white/[0.05] px-3 transition duration-500">
                   <span class="grid size-5 place-items-center rounded-full bg-spark text-[11px] text-ink">✓</span>
                   <span>Your board is ready</span>
                 </div>
-                <p class="label mt-3 text-paper/40">Invite sent · under an hour</p>
+                <p class="label mt-auto text-paper/40">Invite sent · under an hour</p>
                 <svg class="sub-cursor absolute h-5 w-5 transition-all duration-700 ease-out" viewBox="0 0 24 24" fill="white" stroke="black" stroke-width="1"><path d="M5 3l14 8-6 2-3 6z" /></svg>
               </div>
             )}
             {s.ui === 'request' && (
               <div data-anim="request">
                 <div class="mb-2 flex items-center justify-between text-paper/50"><span class="label">Your queue</span><span class="label"><span class="req-count">3</span> requests</span></div>
-                <ul class="req-list space-y-1.5">
+                <ul class="req-list space-y-2">
                   {['Pricing page redesign', 'Q4 investor deck', 'Instagram set × 6'].map((t, i) => (
-                    <li class="req flex items-center justify-between gap-2 rounded-xl bg-white/[0.05] px-3 py-2">
+                    <li class="req flex items-center justify-between gap-2 rounded-xl bg-white/[0.05] h-10 px-3">
                       <span class="truncate">{t}</span>
                       <span class:list={['req-status shrink-0 rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em]', i === 0 ? 'bg-spark/15 text-spark' : 'bg-white/10 text-paper/50']}>{i === 0 ? 'In progress' : 'Queued'}</span>
                     </li>
@@ -67,26 +67,16 @@ const tagColor: Record<string, string> = {
                 <div class="rcv-sets relative mt-3 h-[96px]">
                   <!-- Pricing page: three plan columns, middle one featured -->
                   <div class="rcv-set grid h-full grid-cols-3 gap-1.5" data-job="Pricing page">
-                    {[0, 1, 2].map((v) => (
-                      <div class="rcv-thumb overflow-hidden rounded-md bg-[#f3f1ea] p-1.5" style={`transition-delay:${v * 150}ms`}>
-                        <div class="mx-auto h-1 w-8 rounded-full bg-black/70"></div>
-                        <div class="mt-1.5 grid grid-cols-3 gap-[3px]">
-                          {[0, 1, 2].map((c) => (
-                            <div class:list={['rounded-[3px] p-[3px]', c === 1 ? 'bg-[#ff6a3d]' : 'bg-black/[0.06]']}>
-                              <div class:list={['h-[3px] w-3/4 rounded-full', c === 1 ? 'bg-black/60' : 'bg-black/30']}></div>
-                              <div class:list={['mt-1 h-[7px] w-full rounded-[2px]', c === 1 ? 'bg-black/80' : 'bg-black/60']}></div>
-                              {[0, 1, 2].map(() => <div class="mt-[3px] h-[2px] w-full rounded-full bg-black/20"></div>)}
-                              <div class:list={['mt-1.5 h-[5px] rounded-full', c === 1 ? 'bg-black' : 'bg-black/40']}></div>
-                            </div>
-                          ))}
-                        </div>
+                    {['/placeholder/rcv-pricing-1.webp', '/placeholder/rcv-pricing-2.webp', '/placeholder/rcv-pricing-3.webp'].map((src, v) => (
+                      <div class="rcv-thumb relative overflow-hidden rounded-md bg-[#f3f1ea]" style={`transition-delay:${v * 150}ms`}>
+                        <img src={url(src)} alt="" loading="lazy" class="absolute inset-0 size-full object-cover object-left-top" />
                       </div>
                     ))}
                   </div>
                   <!-- Onboarding flow: three phone screens, steps 1-3 -->
                   <div class="rcv-set grid h-full grid-cols-3 gap-1.5" data-job="Onboarding flow">
                     {[0, 1, 2].map((v) => (
-                      <div class="rcv-thumb grid place-items-center overflow-hidden rounded-md bg-[#1d1b19]" style={`transition-delay:${v * 150}ms`}>
+                      <div class="rcv-thumb grid place-items-center overflow-hidden rounded-md bg-white/[0.06]" style={`transition-delay:${v * 150}ms`}>
                         <div class="flex h-[86px] w-[46px] flex-col rounded-[8px] border border-white/15 bg-[#f3f1ea] p-1.5">
                           <div class="flex gap-[2px]">{[0, 1, 2].map((d) => <span class:list={['h-[3px] flex-1 rounded-full', d <= v ? 'bg-[#ff6a3d]' : 'bg-black/15']}></span>)}</div>
                           <div class="mt-2 h-[4px] w-4/5 rounded-full bg-black/70"></div>
@@ -100,7 +90,7 @@ const tagColor: Record<string, string> = {
                   <!-- Pitch deck: title slide, chart slide, big-number slide -->
                   <div class="rcv-set grid h-full grid-cols-3 gap-1.5" data-job="Pitch deck v2">
                     {[0, 1, 2].map((v) => (
-                      <div class="rcv-thumb flex items-center overflow-hidden rounded-md bg-[#1d1b19] p-1" style={`transition-delay:${v * 150}ms`}>
+                      <div class="rcv-thumb flex items-center overflow-hidden rounded-md bg-white/[0.06] p-1" style={`transition-delay:${v * 150}ms`}>
                         <div class="aspect-video w-full rounded-[3px] bg-[#f3f1ea] p-1.5">
                           {v === 0 && <><div class="h-[5px] w-3/4 rounded-full bg-black/80"></div><div class="mt-1 h-[3px] w-1/2 rounded-full bg-[#ff6a3d]"></div><div class="mt-2 h-[2px] w-1/3 rounded-full bg-black/25"></div></>}
                           {v === 1 && <div class="flex h-full items-end gap-[3px]">{[30, 45, 40, 62, 80].map((h, i) => <span class:list={['flex-1 rounded-t-[1px]', i === 4 ? 'bg-[#ff6a3d]' : 'bg-black/30']} style={`height:${h}%`}></span>)}</div>}
@@ -111,9 +101,9 @@ const tagColor: Record<string, string> = {
                   </div>
                   <!-- Ad set: square ads with photo, headline and CTA -->
                   <div class="rcv-set grid h-full grid-cols-3 gap-1.5" data-job="Ad set × 4">
-                    {['/placeholder/brand-packaging.webp', '/work/perfect-body.webp', '/work/tokni.webp'].map((src, v) => (
+                    {['/placeholder/rcv-ad-1.webp', '/placeholder/rcv-ad-2.webp', '/placeholder/rcv-ad-3.webp'].map((src, v) => (
                       <div class="rcv-thumb relative overflow-hidden rounded-md" style={`transition-delay:${v * 150}ms`}>
-                        <img src={url(src)} alt="" class="absolute inset-0 size-full object-cover" />
+                        <img src={url(src)} alt="" loading="lazy" class="absolute inset-0 size-full object-cover" />
                         <div class="absolute inset-x-1 bottom-1 rounded-[3px] bg-black/75 p-1">
                           <div class="h-[3px] w-4/5 rounded-full bg-white/90"></div>
                           <div class="mt-1 h-[5px] w-1/2 rounded-full bg-[#ff6a3d]"></div>
@@ -130,24 +120,24 @@ const tagColor: Record<string, string> = {
       ))}
     </ol>
 
-    <!-- The board -->
-    <div class="mt-16 rounded-[28px] border border-white/10 bg-pine-800 p-2" data-reveal>
+    <!-- The board: cards move Requested → In progress → Review → Done on a loop -->
+    <div class="mt-16 rounded-[28px] border border-white/10 bg-white/[0.03] p-2" data-reveal>
       <div class="flex items-center gap-1.5 px-4 py-3" aria-hidden="true">
         <span class="size-2.5 rounded-full bg-white/15"></span><span class="size-2.5 rounded-full bg-white/15"></span><span class="size-2.5 rounded-full bg-white/15"></span>
         <span class="label ml-3 text-paper/35">Your request board</span>
       </div>
-      <div class="overflow-x-auto rounded-[22px] bg-pine-900 p-4 sm:p-6">
-        <div class="grid min-w-[760px] grid-cols-4 gap-4">
+      <div class="overflow-x-auto rounded-[22px] border border-white/10 bg-black p-4 sm:p-6">
+        <div class="board grid min-w-[760px] grid-cols-4 gap-4" data-tags={JSON.stringify(tagColor)}>
           {board.map((c) => (
             <div>
-              <p class="label flex items-center justify-between text-paper/45">{c.col}<span>{c.cards.length}</span></p>
-              <ul class="mt-3 space-y-2">
-                {c.cards.map((card: { t: string; tag: string; live?: boolean }) => (
-                  <li class:list={['rounded-xl border p-3 text-[14px]', card.live ? 'border-spark/50 bg-spark/10' : 'border-white/10 bg-white/[0.03]', c.col === 'Done' && 'text-paper/50']}>
-                    <p class:list={[c.col === 'Done' && 'line-through decoration-white/20']}>{card.t}</p>
+              <p class="label flex items-center justify-between text-paper/45">{c.col}<span class="col-count">{c.cards.length}</span></p>
+              <ul class="col-cards mt-3 space-y-2" data-col={c.col}>
+                {c.cards.map((card: { t: string; tag: string }) => (
+                  <li class="card rounded-xl border border-white/10 bg-white/[0.03] p-3 text-[14px]">
+                    <p class="card-t">{card.t}</p>
                     <div class="mt-2 flex items-center justify-between">
-                      <span class:list={['rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em]', tagColor[card.tag] ?? 'bg-white/10 text-paper/60']}>{card.tag}</span>
-                      {card.live && <span class="label flex items-center gap-1.5 text-spark"><span class="dot"></span>Due Wed</span>}
+                      <span class:list={['card-tag rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em]', tagColor[card.tag] ?? 'bg-white/10 text-paper/60']}>{card.tag}</span>
+                      <span class="card-due label text-paper/40">Due Wed</span>
                     </div>
                   </li>
                 ))}
@@ -158,6 +148,10 @@ const tagColor: Record<string, string> = {
       </div>
     </div>
     <p class="mt-5 text-center text-[15px] text-paper/50">Brief it however you like: a doc, a Figma link, a wireframe or a two-minute Loom.</p>
+    <p class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 text-[15px] text-paper/70">
+      Have any questions?
+      <a href={url('/#book')} class="btn-ghost h-11 border-white/12! px-5 text-[14px] hover:border-white/35!">Book a call</a>
+    </p>
   </div>
 </section>
 
@@ -175,6 +169,12 @@ const tagColor: Record<string, string> = {
   /* Request: new cards slide in at the top. */
   .req-enter { animation: req-in 0.5s cubic-bezier(.2,.7,.2,1); }
   @keyframes req-in { from { opacity: 0; transform: translateY(-10px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+  /* Board: the column decides how a card looks. */
+  .board .card-due { display: none; }
+  .board [data-col='In progress'] .card-due { display: inline; }
+  .board [data-col='Done'] .card { color: color-mix(in srgb, var(--color-paper) 50%, transparent); }
+  .board [data-col='Done'] .card-t { text-decoration: line-through; text-decoration-color: rgb(255 255 255 / .2); }
 
   /* Receive: thumbnails pop in once the bar completes. */
   [data-anim='receive'] .rcv-set { position: absolute; inset: 0; visibility: hidden; }
@@ -247,11 +247,41 @@ const tagColor: Record<string, string> = {
       if (next) { next.className = statusCls + ' bg-spark/15 text-spark'; next.textContent = 'In progress'; }
       // a new request lands at the bottom of the queue
       const li = document.createElement('li');
-      li.className = 'req req-enter flex items-center justify-between gap-2 rounded-xl bg-white/[0.05] px-3 py-2';
+      li.className = 'req req-enter flex items-center justify-between gap-2 rounded-xl bg-white/[0.05] h-10 px-3';
       li.innerHTML = `<span class="truncate">${pool[k++ % pool.length]}</span><span class="${statusCls} bg-white text-ink">New</span>`;
       list.appendChild(li);
       setTimeout(() => { const s = li.querySelector('.req-status'); if (s && s.textContent === 'New') { s.className = statusCls + ' bg-white/10 text-paper/50'; s.textContent = 'Queued'; } }, 1200);
       count.textContent = String(++n);
+    });
+  }
+
+  // Board: every few seconds each column hands its top card to the next one.
+  const boardEl = document.querySelector<HTMLElement>('.board');
+  if (boardEl && !reduce) {
+    const cols = [...boardEl.querySelectorAll<HTMLElement>('.col-cards')];
+    const counts = [...boardEl.querySelectorAll('.col-count')];
+    const tags: Record<string, string> = JSON.parse(boardEl.dataset.tags || '{}');
+    const fresh = [['Dashboard UI', 'Product'], ['Logo refresh', 'Brand'], ['Email template', 'Email'], ['Ad set × 4', 'Ads'], ['Pitch one-pager', 'Deck'], ['Landing page hero', 'Web'], ['Instagram set × 6', 'Social']];
+    const template = boardEl.querySelector('.card')!.cloneNode(true) as HTMLElement;
+    let f = 0;
+    const enter = (li: HTMLElement) => { li.classList.remove('req-enter'); void li.offsetWidth; li.classList.add('req-enter'); };
+    whenVisible(boardEl, async () => {
+      await sleep(2600);
+      // Done drops its oldest card, then Review → Done, In progress → Review, Requested → In progress
+      cols[3].lastElementChild?.remove();
+      for (let i = 2; i >= 0; i--) {
+        const card = cols[i].firstElementChild as HTMLElement | null;
+        if (card) { cols[i + 1].prepend(card); enter(card); }
+      }
+      // a new request lands at the bottom of Requested
+      const [t, tag] = fresh[f++ % fresh.length];
+      const li = template.cloneNode(true) as HTMLElement;
+      li.querySelector('.card-t')!.textContent = t;
+      const chip = li.querySelector('.card-tag')!;
+      chip.className = 'card-tag rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] ' + (tags[tag] ?? 'bg-white/10 text-paper/60');
+      chip.textContent = tag;
+      cols[0].appendChild(li); enter(li);
+      cols.forEach((c, i) => (counts[i].textContent = String(c.children.length)));
     });
   }
 

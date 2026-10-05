@@ -127,7 +127,7 @@ export const testimonials = [
 // Request board mock (the "how you'll work with us" section).
 export const board = [
   { col: 'Requested', cards: [{ t: 'Pricing page redesign', tag: 'Web' }, { t: 'Q4 investor deck', tag: 'Deck' }, { t: 'Instagram set × 6', tag: 'Social' }] },
-  { col: 'In progress', cards: [{ t: 'Onboarding flow, 5 screens', tag: 'Product', live: true }] },
+  { col: 'In progress', cards: [{ t: 'Onboarding flow, 5 screens', tag: 'Product' }] },
   { col: 'Review', cards: [{ t: 'Logo refresh, round 2', tag: 'Brand' }] },
   { col: 'Done', cards: [{ t: 'Landing page hero', tag: 'Web' }, { t: 'Email template', tag: 'Email' }, { t: 'Ad set × 4', tag: 'Ads' }] },
 ];
