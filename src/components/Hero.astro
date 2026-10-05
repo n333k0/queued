@@ -1,5 +1,6 @@
 ---
 import { url } from '../lib/url';
+import { srcset } from '../lib/img';
 import ParentLogo from './ParentLogo.astro';
 import Shader from './Shader.astro';
 import { brand, plan, spotsOpen, capacity } from '../data/site';
@@ -70,9 +71,9 @@ const loop = [...tiles, ...tiles];
       {loop.map((t, i) => (
         <div class:list={['shrink-0 overflow-hidden rounded-[22px] bg-pine-800', t.w, t.h]} aria-hidden={i >= tiles.length ? 'true' : undefined}>
           {t.src.endsWith('.mp4') ? (
-            <video class="size-full object-cover" src={url(t.src)} autoplay muted loop playsinline preload="metadata"></video>
+            <video class="size-full object-cover" src={url(t.src)} muted loop playsinline preload="none" poster={url(t.src.replace('.mp4', '-poster.webp'))} data-autoplay></video>
           ) : (
-            <img class="size-full object-cover" src={url(t.src)} alt="" loading={i < 5 ? 'eager' : 'lazy'} />
+            <img class="size-full object-cover" src={url(t.src)} srcset={srcset(t.src)} sizes="(min-width: 640px) 320px, 260px" alt="" loading={i < 5 ? 'eager' : 'lazy'} />
           )}
         </div>
       ))}

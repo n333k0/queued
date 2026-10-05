@@ -1,5 +1,6 @@
 ---
 import { url } from '../lib/url';
+import { srcset } from '../lib/img';
 import { steps, board, plan } from '../data/site';
 
 const tagColor: Record<string, string> = {
@@ -71,7 +72,7 @@ const ticker = ['Unlimited requests', 'Fixed monthly rate', '~48-hour delivery',
                   <div class="rcv-set grid h-full grid-cols-3 gap-1.5" data-job="Pricing page">
                     {['/placeholder/rcv-pricing-1.webp', '/placeholder/rcv-pricing-2.webp', '/placeholder/rcv-pricing-3.webp'].map((src, v) => (
                       <div class="rcv-thumb relative overflow-hidden rounded-md bg-[#f3f1ea]" style={`transition-delay:${v * 150}ms`}>
-                        <img src={url(src)} alt="" loading="lazy" class="absolute inset-0 size-full object-cover object-left-top" />
+                        <img src={url(src)} srcset={srcset(src)} sizes="160px" alt="" loading="lazy" class="absolute inset-0 size-full object-cover object-left-top" />
                       </div>
                     ))}
                   </div>
@@ -84,7 +85,7 @@ const ticker = ['Unlimited requests', 'Fixed monthly rate', '~48-hour delivery',
                             <div class="flex items-center justify-between text-[3.5px] font-semibold leading-none"><span>9:41</span><span class="h-[3px] w-[11px] rounded-full bg-black"></span><span class="flex gap-[1px]"><span class="h-[2.5px] w-[3px] rounded-[0.5px] bg-black"></span><span class="h-[2.5px] w-[1.5px] rounded-[0.5px] bg-black/40"></span></span></div>
                             <div class="mt-[4px] flex gap-[1.5px]">{[0, 1, 2].map((d) => <span class:list={['h-[1.5px] flex-1 rounded-full', d <= v ? 'bg-[#ff6a3d]' : 'bg-black/10']}></span>)}</div>
                             {v === 0 && <>
-                              <span class="mt-[5px] grid size-[9px] place-items-center rounded-[3px] bg-[#ff6a3d] text-[5px] font-bold leading-none text-black">n</span>
+                              <span class="mt-[5px] grid size-[9px] place-items-center rounded-[3px] bg-[#ff6a3d] text-[5px] font-semibold leading-none text-black">n</span>
                               <p class="mt-[3px] text-[5.5px] font-semibold leading-[1.1] tracking-tight">Create your account</p>
                               <p class="mt-[1px] text-[3px] leading-tight text-black/45">Takes about a minute.</p>
                               <p class="mt-[3px] text-[2.8px] font-medium text-black/55">Email</p>
@@ -156,7 +157,7 @@ const ticker = ['Unlimited requests', 'Fixed monthly rate', '~48-hour delivery',
                   <div class="rcv-set grid h-full grid-cols-3 gap-1.5" data-job="Ad set × 4">
                     {['/placeholder/rcv-ad-1.webp', '/placeholder/rcv-ad-2.webp', '/placeholder/rcv-ad-3.webp'].map((src, v) => (
                       <div class="rcv-thumb relative overflow-hidden rounded-md" style={`transition-delay:${v * 150}ms`}>
-                        <img src={url(src)} alt="" loading="lazy" class="absolute inset-0 size-full object-cover" />
+                        <img src={url(src)} srcset={srcset(src)} sizes="160px" alt="" loading="lazy" class="absolute inset-0 size-full object-cover" />
                       </div>
                     ))}
                   </div>

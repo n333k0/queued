@@ -1,5 +1,6 @@
 ---
 import { url } from '../lib/url';
+import { srcset } from '../lib/img';
 import { scope, scopeMore } from '../data/site';
 ---
 
@@ -16,7 +17,7 @@ import { scope, scopeMore } from '../data/site';
     <div class="mt-14 grid grid-cols-2 gap-4 lg:grid-cols-4">
       {scope.map((s, i) => (
         <article class:list={['group relative overflow-hidden rounded-[22px] bg-ink', i === 0 ? 'col-span-2 row-span-2 aspect-square lg:aspect-auto' : 'aspect-[4/5]']} data-reveal>
-          <img src={url(s.img)} alt="" loading="lazy" class="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-[1.04]" />
+          <img src={url(s.img)} srcset={srcset(s.img)} sizes={i === 0 ? "(min-width: 1024px) 50vw, 100vw" : "(min-width: 1024px) 25vw, 50vw"} alt="" loading="lazy" class="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-[1.04]" />
           <h3 class="absolute bottom-4 left-4 right-4 w-fit rounded-full bg-pine-950 px-4 py-2 text-[14px] font-medium tracking-tight text-paper sm:text-[15px]">{s.title}</h3>
         </article>
       ))}
