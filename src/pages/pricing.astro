@@ -1,6 +1,7 @@
 ---
 // Pricing page: Superside's pricing-page structure, sized for a small senior studio.
 import Layout from '../layouts/Layout.astro';
+import CallPicker from '../components/CallPicker.astro';
 import { url } from '../lib/url';
 import { plan, links, brand, spotsOpen, capacity } from '../data/site';
 
@@ -74,22 +75,30 @@ const faq = [
 ---
 
 <Layout title={`Pricing · ${brand.name} by ${brand.parent}`}>
-  <!-- Hero: text left, photo right -->
-  <section class="pt-[96px] sm:pt-[112px]">
-    <div class="wrap grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-      <div>
-        <p class="label border-b border-white/20 pb-5 text-paper/70">Pricing</p>
-        <h1 class="display mt-8 t-h2">Your design backlog, <span class="accent text-spark">cleared every week.</span></h1>
-        <p class="mt-6 max-w-lg text-[20px] leading-snug text-paper/85">One subscription, three ways to work.</p>
-        <p class="mt-4 max-w-lg text-[16px] leading-relaxed text-paper/60">A small senior team with AI behind the scenes. No hiring, no retainers, no proposals. Start this week, pause when it’s quiet.</p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="#ways" class="btn-primary h-12 px-6">See plans</a>
-          <a href={url('/#book')} data-call class="btn-ghost h-12 px-6">Book a 15-min call</a>
+  <!-- Hero: full-bleed photo behind, big headline bottom-left (Superside-style) -->
+  <section class="relative isolate flex min-h-[100svh] items-end overflow-hidden pb-12 pt-[140px] sm:pb-16">
+    <img src={url('/placeholder/pricing-hero.webp')} alt="" class="absolute inset-0 -z-20 size-full object-cover object-[70%_18%]" />
+    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-black via-black/75 to-black/10" aria-hidden="true"></div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/10 to-black/50" aria-hidden="true"></div>
+    <div class="wrap w-full">
+      <div class="max-w-[1000px]">
+        <span class="chip border-white/15 bg-black/40 text-paper/80 backdrop-blur"><span class="dot"></span>{spotsOpen} of {capacity.total} member spots open</span>
+        <h1 class="display mt-6 t-hero">Your design backlog, <span class="accent text-spark">cleared every week.</span></h1>
+        <p class="mt-6 max-w-xl text-[18px] leading-relaxed text-paper/80 sm:text-[20px]">A small senior team with AI behind the scenes. No hiring, no retainers, no proposals. Start this week, pause when it’s quiet.</p>
+        <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+          <a href="#ways" class="btn-primary h-14 px-8 text-[16px] btn-wide">See all subscriptions</a>
+          <a href="#call" data-call class="btn-ghost h-14 border-white/25 bg-black/30 px-8 text-[16px] backdrop-blur btn-wide">Book a free 15-min call</a>
         </div>
-        <p class="label mt-6 flex items-center gap-2 text-paper/50"><span class="dot"></span>{spotsOpen} of {capacity.total} member spots open</p>
       </div>
-      <div class="overflow-hidden rounded-[24px] bg-pine-800">
-        <img src={url('/placeholder/pricing-hero.webp')} alt="A design team at work" class="aspect-[4/5] w-full object-cover lg:aspect-square" />
+      <!-- the three ways, at a glance -->
+      <div class="mt-14 grid gap-px overflow-hidden rounded-[24px] bg-white/10 backdrop-blur-md sm:grid-cols-3">
+        {ways.map((w) => (
+          <a href="#ways" class="bg-black/55 p-5 transition hover:bg-black/40 sm:p-6">
+            <p class="label text-paper/50">{w.name}</p>
+            <p class="mt-2 text-[24px] font-medium tracking-tight">{w.price}<span class="text-[15px] text-paper/50">{w.unit}</span></p>
+            <p class="mt-1 text-[14px] text-paper/60">{w.best}</p>
+          </a>
+        ))}
       </div>
     </div>
   </section>
@@ -105,7 +114,6 @@ const faq = [
           <article class:list={['flex flex-col p-8 sm:p-10', w.featured ? 'bg-pine-800' : 'bg-pine-900']}>
             <div class="flex items-center justify-between">
               <h3 class="text-[28px] font-medium tracking-tight">{w.name}</h3>
-              {w.featured && <span class="chip border-0 bg-spark text-ink">Most popular</span>}
             </div>
             <p class="mt-2 text-[15px] text-paper/55">{w.best}</p>
             <p class="mt-8"><span class="display text-[48px]">{w.price}</span><span class="text-[16px] text-paper/50">{w.unit}</span></p>
@@ -176,18 +184,18 @@ const faq = [
     </div>
   </section>
 
-  <!-- Close -->
-  <section class="wrap pb-24">
-    <div class="grid overflow-hidden rounded-[24px] bg-spark text-ink lg:grid-cols-2">
-      <div class="p-8 sm:p-14">
-        <h2 class="display t-h2">Your team’s <span class="accent">design team.</span></h2>
-        <p class="mt-5 max-w-md text-[17px] text-ink/70">Queue it. We’ll ship it. Pause or cancel anytime.</p>
+  <!-- Close: accent block with the intro-call calendar -->
+  <section id="call" class="wrap scroll-mt-24 pb-24">
+    <div class="grid items-center gap-10 rounded-[40px] bg-spark p-6 text-ink sm:p-12 lg:grid-cols-[1fr_1.35fr] lg:gap-14 lg:p-14">
+      <div>
+        <p class="label text-ink/60">Book a call</p>
+        <h2 class="display mt-4 t-h2">Your team’s <span class="accent">design team.</span></h2>
+        <p class="mt-5 max-w-md text-[17px] text-ink/70">Pick a time for a free 15-minute intro call. Or skip it and start today: queue it, we’ll ship it. Pause or cancel anytime.</p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href={links.checkout} class="btn-ink">Join today</a>
-          <a href={url('/#book')} data-call class="btn-line-ink">Book a 15-min call</a>
+          <a href={links.checkout} class="btn-ink h-12 px-6">Join today</a>
         </div>
       </div>
-      <img src={url('/placeholder/pricing-video.webp')} alt="" loading="lazy" class="h-full min-h-[280px] w-full object-cover" />
+      <CallPicker solid />
     </div>
   </section>
 </Layout>
