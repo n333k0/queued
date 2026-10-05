@@ -66,26 +66,37 @@ const { class: className = '' } = Astro.props;
     q += .16 * vec2(snoise(p * 1.1 + vec2(0., t * .06)), snoise(p * 1.1 + vec2(5.2, -t * .05)));
     q += .05 * vec2(snoise(p * 3. - t * .09), snoise(p * 3. + 9.1 + t * .08));
 
-    // four blobs orbiting the edges, so the centre (where the copy sits) stays mostly dark.
-    // portrait (phones): smaller blobs that keep to the top and bottom edges
+    // pointer: the plane bulges toward the cursor nearby, so the blobs visibly reach for it
+    vec2 dm = p - u_mouse;
+    q -= dm * .35 * u_hover * exp(-dot(dm, dm) / .05);
+
+    // two clusters anchored in the bottom-left and top-right corners, wandering around them.
+    // portrait (phones): smaller blobs
     float k = 1. - smoothstep(.6, 1.2, asp);
-    float rx = .5 * asp + mix(.08, .1, k), ry = mix(.56, .66, k);
-    float sz = mix(1., .32, k);
-    vec2 b1 = vec2(cos(t * .11 + .6) * rx, sin(t * .09 + .6) * ry);
-    vec2 b2 = vec2(cos(t * .08 + 3.4) * rx * .95, sin(t * .12 + 3.0) * ry);
-    vec2 b3 = vec2(cos(-t * .07 + 1.9) * rx * 1.05, sin(-t * .1 + 2.2) * ry * .9);
-    vec2 b4 = mix(vec2(cos(t * .05 + 5.) * rx * .7, sin(t * .06 + 4.4) * ry * .8), u_mouse, .35 * u_hover);
-    float w1 = exp(-dot(q - b1, q - b1) / (.085 * sz));
-    float w2 = exp(-dot(q - b2, q - b2) / (.07 * sz));
-    float w3 = exp(-dot(q - b3, q - b3) / (.06 * sz));
-    float w4 = exp(-dot(q - b4, q - b4) / (.045 * sz));
+    float sz = mix(1., .4, k);
+    vec2 BL = vec2(-.5 * asp, -.5), TR = vec2(.5 * asp + .06, .5 + .1); // TR sits a bit off-canvas so the nav stays readable
+    vec2 b1 = BL + vec2(.13 + .07 * sin(t * .23), .11 + .06 * cos(t * .19)) * mix(1., .6, k);
+    vec2 b2 = BL + vec2(.40 + .12 * sin(t * .17 + 1.3), .03 + .07 * cos(t * .21 + .4)) * mix(1., .6, k);
+    vec2 b3 = TR - vec2(.13 + .07 * sin(t * .2 + 2.), .11 + .06 * cos(t * .25 + 1.)) * mix(1., .6, k);
+    vec2 b4 = TR - vec2(.04 + .06 * sin(t * .15 + 4.), .5 + .1 * cos(t * .18 + 2.5)) * mix(1., .6, k);
+    // every blob leans toward the pointer while it is over the hero
+    float pull = .16 * u_hover;
+    b1 += (u_mouse - b1) * pull; b2 += (u_mouse - b2) * pull; b3 += (u_mouse - b3) * pull; b4 += (u_mouse - b4) * pull;
+    float w1 = exp(-dot(q - b1, q - b1) / (.13 * sz));
+    float w2 = exp(-dot(q - b2, q - b2) / (.06 * sz));
+    float w3 = exp(-dot(q - b3, q - b3) / (.1 * sz));
+    float w4 = exp(-dot(q - b4, q - b4) / (.055 * sz));
     float W = w1 + w2 + w3 + w4;
     vec3 col = (u_c1 * w1 + u_c2 * w2 + u_c3 * w3 + u_c4 * w4) / max(W, 1e-4);
 
-    // soft body with a defined shoulder (like the reference), then keep the copy area quieter
+    // soft body with a defined shoulder (like the reference)
     float I = smoothstep(.08, .95, 1. - exp(-W * 1.6));
-    float centre = smoothstep(.12, .62, length(p * vec2(.75 / max(asp, 1.) * 1.6, 1.25)));
-    I *= mix(mix(.28, .1, k), 1., centre);
+    // keep-out zone around the headline + copy: fully dark there
+    float eD = length(vec2(p.x / (.34 * max(asp, 1.)), (p.y - .03) / .34));
+    float maskD = smoothstep(.8, 1.3, eD);
+    float maskP = max(smoothstep(-.12, -.3, p.y), smoothstep(.4, .5, p.y)); // phones: only below the copy / at the very top
+    I *= mix(maskD, maskP, k);
+    I *= mix(.2, 1., smoothstep(.5, .36, p.y)); // soft fade under the nav so its links stay readable
 
     // grain: fresh per device pixel, re-seeded ~24 times a second (film cadence)
     uint frame = uint(floor(u_t * 24.));
@@ -152,8 +163,8 @@ const { class: className = '' } = Astro.props;
       raf = 0;
       const dt = Math.min((now - last) / 1000, .1); last = now;
       time += dt;
-      mouse = mouse.map((m, i) => m + (target[i] - m) * .04);
-      hover += (hoverTarget - hover) * .05;
+      mouse = mouse.map((m, i) => m + (target[i] - m) * .2); // fast follow
+      hover += (hoverTarget - hover) * .12;
       resize();
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uT, time);
