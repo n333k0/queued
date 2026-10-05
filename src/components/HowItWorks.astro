@@ -31,10 +31,10 @@ const tagColor: Record<string, string> = {
             {s.ui === 'subscribe' && (
               <div class="anim-sub relative flex h-full flex-col" data-anim="subscribe" data-state="0">
                 <div class="flex items-center justify-between"><span class="text-paper/60">{plan.name}</span><span class="font-medium">{plan.priceLabel}<span class="text-paper/45">{plan.period}</span></span></div>
-                <div class="sub-btn relative mt-3 flex h-10 items-center justify-between rounded-xl bg-spark px-3 font-semibold text-ink transition duration-300">
+                <div class="sub-btn relative mt-3 flex h-12 items-center justify-between rounded-xl bg-spark px-3 font-semibold text-ink transition duration-300">
                   <span class="sub-label">Start today</span><span class="sub-arrow">→</span>
                 </div>
-                <div class="sub-ready mt-3 flex h-10 items-center gap-2 rounded-xl bg-white/[0.05] px-3 transition duration-500">
+                <div class="sub-ready mt-3 flex h-12 items-center gap-2 rounded-xl bg-white/[0.05] px-3 transition duration-500">
                   <span class="grid size-5 place-items-center rounded-full bg-spark text-[11px] text-ink">✓</span>
                   <span>Your board is ready</span>
                 </div>
@@ -104,10 +104,6 @@ const tagColor: Record<string, string> = {
                     {['/placeholder/rcv-ad-1.webp', '/placeholder/rcv-ad-2.webp', '/placeholder/rcv-ad-3.webp'].map((src, v) => (
                       <div class="rcv-thumb relative overflow-hidden rounded-md" style={`transition-delay:${v * 150}ms`}>
                         <img src={url(src)} alt="" loading="lazy" class="absolute inset-0 size-full object-cover" />
-                        <div class="absolute inset-x-1 bottom-1 rounded-[3px] bg-black/75 p-1">
-                          <div class="h-[3px] w-4/5 rounded-full bg-white/90"></div>
-                          <div class="mt-1 h-[5px] w-1/2 rounded-full bg-[#ff6a3d]"></div>
-                        </div>
                       </div>
                     ))}
                   </div>
@@ -150,7 +146,7 @@ const tagColor: Record<string, string> = {
     <p class="mt-5 text-center text-[15px] text-paper/50">Brief it however you like: a doc, a Figma link, a wireframe or a two-minute Loom.</p>
     <p class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 text-[15px] text-paper/70">
       Have any questions?
-      <a href={url('/#book')} class="btn-ghost h-11 border-white/12! px-5 text-[14px] hover:border-white/35!">Book a call</a>
+      <a href={url('/#book')} class="btn-ghost h-12 min-w-[220px] border-white/12! px-8 text-[15px] hover:border-white/35!">Book a call</a>
     </p>
   </div>
 </section>
@@ -181,6 +177,7 @@ const tagColor: Record<string, string> = {
   [data-anim='receive'] .rcv-set.on { visibility: visible; }
   [data-anim='receive'] .rcv-thumb { opacity: 0; transform: scale(0.9); transition: opacity .5s, transform .5s; }
   [data-anim='receive'][data-state='done'] .rcv-thumb { opacity: 1; transform: none; }
+  [data-anim='receive'][data-state='out'] .rcv-thumb { transition-duration: .3s; transition-delay: 0s !important; }
   [data-anim='receive'][data-state='done'] .rcv-icon { background: var(--color-spark); color: var(--color-ink); border-color: transparent; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -264,14 +261,18 @@ const tagColor: Record<string, string> = {
     const fresh = [['Dashboard UI', 'Product'], ['Logo refresh', 'Brand'], ['Email template', 'Email'], ['Ad set × 4', 'Ads'], ['Pitch one-pager', 'Deck'], ['Landing page hero', 'Web'], ['Instagram set × 6', 'Social']];
     const template = boardEl.querySelector('.card')!.cloneNode(true) as HTMLElement;
     let f = 0;
-    const enter = (li: HTMLElement) => { li.classList.remove('req-enter'); void li.offsetWidth; li.classList.add('req-enter'); };
+    const ease = 'cubic-bezier(.2,.7,.2,1)';
     whenVisible(boardEl, async () => {
       await sleep(2600);
-      // Done drops its oldest card, then Review → Done, In progress → Review, Requested → In progress
-      cols[3].lastElementChild?.remove();
+      // Done's oldest card fades out first
+      const old = cols[3].lastElementChild as HTMLElement | null;
+      if (old) { old.animate([{ opacity: 1 }, { opacity: 0, transform: 'scale(.96)' }], { duration: 300, easing: ease, fill: 'forwards' }); await sleep(300); old.remove(); }
+      // FLIP: measure, move every column's top card one column right, then slide from the old spot
+      const cards = [...boardEl.querySelectorAll<HTMLElement>('.card')];
+      const before = new Map(cards.map((c) => [c, c.getBoundingClientRect()]));
       for (let i = 2; i >= 0; i--) {
-        const card = cols[i].firstElementChild as HTMLElement | null;
-        if (card) { cols[i + 1].prepend(card); enter(card); }
+        const card = cols[i].firstElementChild;
+        if (card) cols[i + 1].prepend(card);
       }
       // a new request lands at the bottom of Requested
       const [t, tag] = fresh[f++ % fresh.length];
@@ -280,8 +281,14 @@ const tagColor: Record<string, string> = {
       const chip = li.querySelector('.card-tag')!;
       chip.className = 'card-tag rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] ' + (tags[tag] ?? 'bg-white/10 text-paper/60');
       chip.textContent = tag;
-      cols[0].appendChild(li); enter(li);
+      cols[0].appendChild(li);
       cols.forEach((c, i) => (counts[i].textContent = String(c.children.length)));
+      cards.forEach((c) => {
+        const a = before.get(c)!, b = c.getBoundingClientRect();
+        const dx = a.left - b.left, dy = a.top - b.top;
+        if (dx || dy) c.animate([{ transform: `translate(${dx}px,${dy}px)` }, { transform: 'none' }], { duration: 700, easing: ease });
+      });
+      li.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 500, delay: 350, easing: ease, fill: 'backwards' });
     });
   }
 
@@ -308,6 +315,9 @@ const tagColor: Record<string, string> = {
         for (let p = 0; p <= 100; p += 4) { bar.style.width = p + '%'; pct.textContent = p + '%'; await sleep(55); }
         done();
         await sleep(2800);
+        // fade this job's thumbnails out, then swap sets while they're invisible
+        rcv.dataset.state = 'out';
+        await sleep(350);
       });
   }
 </script>
