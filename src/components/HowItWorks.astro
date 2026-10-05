@@ -11,9 +11,11 @@ const tagColor: Record<string, string> = {
   Email: 'bg-emerald-400/15 text-emerald-300',
   Ads: 'bg-rose-400/15 text-rose-300',
 };
+
+const ticker = ['Unlimited requests', 'Fixed monthly rate', '~48-hour delivery', 'Senior quality', 'Pause anytime'];
 ---
 
-<section id="how" class="py-24 sm:py-32">
+<section id="how" class="pt-24 sm:pt-32">
   <div class="wrap">
     <div class="max-w-3xl" data-reveal>
       <p class="label text-spark">How it works</p>
@@ -198,10 +200,30 @@ const tagColor: Record<string, string> = {
       <span>Brief it however you like: a doc, a Figma link, a wireframe or a two-minute Loom. <span class="text-paper/80">Have any questions?</span></span>
       <a href={url('/#book')} class="btn-ghost h-12 min-w-[220px] px-8 text-[15px]">Book a call</a>
     </p>
+
+    <!-- Section divider: accent block with the membership promises on a loop. -->
+    <div class="mt-8 overflow-hidden rounded-[28px] bg-spark px-4 py-7 text-ink sm:mt-7 sm:px-8 sm:py-9" role="img" aria-label={ticker.join(', ')}>
+      <div class="ticker overflow-hidden">
+      <div class="flex w-max animate-ticker" aria-hidden="true">
+        {[0, 1].map(() => (
+          <div class="flex shrink-0 items-center">
+            {ticker.map((t) => (
+              <span class="flex items-center whitespace-nowrap text-[32px] font-medium tracking-[-0.02em] sm:text-[48px] lg:text-[56px]">
+                <span class="px-6 sm:px-8">{t}</span>
+                <svg viewBox="0 0 24 24" class="size-5 sm:size-7" fill="currentColor"><path d="M12 0c.6 6.4 5.6 11.4 12 12-6.4.6-11.4 5.6-12 12-.6-6.4-5.6-11.4-12-12C6.4 11.4 11.4 6.4 12 0z" /></svg>
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <style is:global>
+  /* Divider ticker: fade the text in/out at the block edges. */
+  .ticker { mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
   /* Subscribe: cursor travels to the button, button confirms, board-ready row appears. */
   .anim-sub .sub-cursor { left: 85%; top: 120%; opacity: 0; }
   .anim-sub[data-state='1'] .sub-cursor { left: 70%; top: 40%; opacity: 1; }
