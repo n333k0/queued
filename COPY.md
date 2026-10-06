@@ -9,14 +9,26 @@ House style: sharp, cheeky, specific. No "We don't X. We Y." / "Not X. Y." contr
 
 ---
 
+## v2.1 — v1 hero headline back (2026-10-06, tag `copy-v2.1`)
+
+User preferred the original hero headline. Everything else from v2 stays (including the v2 hero sub).
+
+| Spot | File | v2.1 (live) | v2 (previous) |
+|---|---|---|---|
+| Hero H1 | `src/components/Hero.astro` | Your design team. / *On subscription.* | Senior creatives, / *on your team today.* |
+
+Live set now: hero H1 from v1; hero sub, How it works, Benefits from v2.
+
+---
+
 ## v2 — "creative partner" angle (2026-10-06, tag `copy-v2`)
 
 **Audience (ICP):** marketing, brand and product leads at 50–500-person companies. They have an in-house team that's overloaded, a design backlog, and a hiring req that's been open for months. They compare us against a senior hire, an agency retainer and freelancers. They care about quality bar, speed of onboarding, and predictable spend they can get past finance.
 **Angle:** the senior design partner your team has been asking for, already onboarded (Superside's "creative partner / raise the quality bar / keep up with you", in our words).
 
-| Spot | File | v2 (live) | v1 (previous) |
+| Spot | File | v2 | v1 (previous) |
 |---|---|---|---|
-| Hero H1 | `src/components/Hero.astro` | Senior creatives, / *on your team today.* | Your design team. / *On subscription.* |
+| Hero H1 | `src/components/Hero.astro` | Senior creatives, / *on your team today.* (replaced in v2.1) | Your design team. / *On subscription.* |
 | Hero sub | `src/components/Hero.astro` | A senior design team that works inside your workflow. Websites, product UI, brand, decks and ads in about 48 hours each, for one flat monthly fee. Skip the hiring round. Pause anytime. | Websites, product UI, brand, decks and ads. Request as much as you want, get it in about 48 hours. One flat monthly fee. Pause or cancel anytime. |
 | How it works H2 | `src/components/HowItWorks.astro` | Plugged into your team / *within the hour.* | The way design should've worked / *all along.* |
 | Benefits H2 | `src/components/Benefits.astro` | Your quality bar, / *raised by default.* | It's "you'll never go back" / *better.* |
