@@ -15,8 +15,8 @@
 
 @theme {
   --color-black: #0b0b0b; /* off-black: every bg-black / from-black follows the page colour */
-  --color-spark: #ff6a3d;
-  --color-spark-dim: #e2552b;
+  --color-spark: #eb4f2b;
+  --color-spark-dim: #c93d1c;
   --color-paper: #f3f1ea;
   --color-paper-2: #e9e6dc;
   --color-booked: #ff8a65;

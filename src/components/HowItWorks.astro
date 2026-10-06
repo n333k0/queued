@@ -83,15 +83,15 @@ const tagColor: Record<string, string> = {
                         <div class="h-[90px] w-[50px] rounded-[10px] bg-[#2a2a2a] p-[2px]">
                           <div class="relative flex h-full flex-col overflow-hidden rounded-[8px] bg-white px-[4px] pb-[4px] pt-[3px] text-black">
                             <div class="flex items-center justify-between text-[3.5px] font-semibold leading-none"><span>9:41</span><span class="h-[3px] w-[11px] rounded-full bg-black"></span><span class="flex gap-[1px]"><span class="h-[2.5px] w-[3px] rounded-[0.5px] bg-black"></span><span class="h-[2.5px] w-[1.5px] rounded-[0.5px] bg-black/40"></span></span></div>
-                            <div class="mt-[4px] flex gap-[1.5px]">{[0, 1, 2].map((d) => <span class:list={['h-[1.5px] flex-1 rounded-full', d <= v ? 'bg-[#ff6a3d]' : 'bg-black/10']}></span>)}</div>
+                            <div class="mt-[4px] flex gap-[1.5px]">{[0, 1, 2].map((d) => <span class:list={['h-[1.5px] flex-1 rounded-full', d <= v ? 'bg-[#eb4f2b]' : 'bg-black/10']}></span>)}</div>
                             {v === 0 && <>
-                              <span class="mt-[5px] grid size-[9px] place-items-center rounded-[3px] bg-[#ff6a3d] text-[5px] font-semibold leading-none text-black">n</span>
+                              <span class="mt-[5px] grid size-[9px] place-items-center rounded-[3px] bg-[#eb4f2b] text-[5px] font-semibold leading-none text-black">n</span>
                               <p class="mt-[3px] text-[5.5px] font-semibold leading-[1.1] tracking-tight">Create your account</p>
                               <p class="mt-[1px] text-[3px] leading-tight text-black/45">Takes about a minute.</p>
                               <p class="mt-[3px] text-[2.8px] font-medium text-black/55">Email</p>
                               <div class="mt-[1px] flex h-[7px] items-center rounded-[2px] border-[0.5px] border-black/20 px-[2px] text-[3px] text-black/70">ana@nova.co</div>
                               <p class="mt-[2px] text-[2.8px] font-medium text-black/55">Password</p>
-                              <div class="mt-[1px] flex h-[7px] items-center gap-[1px] rounded-[2px] border-[0.5px] border-[#ff6a3d] px-[2px]">{[0, 1, 2, 3, 4, 5].map(() => <span class="size-[1.5px] rounded-full bg-black/70"></span>)}</div>
+                              <div class="mt-[1px] flex h-[7px] items-center gap-[1px] rounded-[2px] border-[0.5px] border-[#eb4f2b] px-[2px]">{[0, 1, 2, 3, 4, 5].map(() => <span class="size-[1.5px] rounded-full bg-black/70"></span>)}</div>
                               <div class="mt-auto grid h-[8px] place-items-center rounded-full bg-black text-[3.5px] font-medium text-white">Continue</div>
                             </>}
                             {v === 1 && <>
@@ -99,20 +99,20 @@ const tagColor: Record<string, string> = {
                               <p class="mt-[1px] text-[3px] leading-tight text-black/45">Pick all that apply.</p>
                               <div class="mt-[4px] grid grid-cols-2 gap-[2px]">
                                 {[['Sales', 1], ['Ops', 0], ['Hiring', 0], ['Finance', 1], ['Support', 0], ['Design', 1]].map(([t, on]) => (
-                                  <span class:list={['flex h-[8px] items-center gap-[1px] rounded-[2px] px-[2px] text-[3px] font-medium', on ? 'bg-[#ff6a3d]/12 text-[#d9481c] ring-[0.5px] ring-[#ff6a3d]' : 'bg-black/[0.05] text-black/60']}>{on ? '✓' : ''}{t}</span>
+                                  <span class:list={['flex h-[8px] items-center gap-[1px] rounded-[2px] px-[2px] text-[3px] font-medium', on ? 'bg-[#eb4f2b]/12 text-[#d9481c] ring-[0.5px] ring-[#eb4f2b]' : 'bg-black/[0.05] text-black/60']}>{on ? '✓' : ''}{t}</span>
                                 ))}
                               </div>
                               <div class="mt-auto grid h-[8px] place-items-center rounded-full bg-black text-[3.5px] font-medium text-white">Continue · 3</div>
                             </>}
                             {v === 2 && <>
-                              <div class="relative mx-auto mt-[8px] grid size-[16px] place-items-center rounded-full bg-[#ff6a3d] text-[7px] leading-none text-black">✓
-                                <span class="absolute -left-[5px] top-0 size-[2px] rounded-full bg-[#ffc2ad]"></span><span class="absolute -right-[4px] top-[3px] size-[1.5px] rounded-full bg-[#ff6a3d]"></span><span class="absolute -right-[6px] bottom-0 size-[2px] rounded-full bg-black/20"></span>
+                              <div class="relative mx-auto mt-[8px] grid size-[16px] place-items-center rounded-full bg-[#eb4f2b] text-[7px] leading-none text-black">✓
+                                <span class="absolute -left-[5px] top-0 size-[2px] rounded-full bg-[#ffc2ad]"></span><span class="absolute -right-[4px] top-[3px] size-[1.5px] rounded-full bg-[#eb4f2b]"></span><span class="absolute -right-[6px] bottom-0 size-[2px] rounded-full bg-black/20"></span>
                               </div>
                               <p class="mt-[4px] text-center text-[5.5px] font-semibold leading-[1.1] tracking-tight">You’re all set</p>
                               <p class="mt-[1px] text-center text-[3px] leading-tight text-black/45">Your workspace is ready.</p>
                               <div class="mx-auto mt-[4px] flex -space-x-[2px]">{['#ffb199', '#c8bdff', '#9be0c4'].map((c) => <span class="size-[6px] rounded-full ring-[0.5px] ring-white" style={`background:${c}`}></span>)}</div>
                               <p class="mt-[1px] text-center text-[2.8px] text-black/45">3 teammates invited</p>
-                              <div class="mt-auto grid h-[8px] place-items-center rounded-full bg-[#ff6a3d] text-[3.5px] font-medium text-black">Get started</div>
+                              <div class="mt-auto grid h-[8px] place-items-center rounded-full bg-[#eb4f2b] text-[3.5px] font-medium text-black">Get started</div>
                             </>}
                           </div>
                         </div>
@@ -125,8 +125,8 @@ const tagColor: Record<string, string> = {
                       <div class="rcv-thumb flex flex-col justify-center gap-1.5 overflow-hidden rounded-md bg-white/[0.06] p-1.5" style={`transition-delay:${v * 150}ms`}>
                         {v === 0 && (
                           <div class="relative aspect-video w-full overflow-hidden rounded-[3px] bg-[#111] p-[5px] text-white">
-                            <span class="absolute -bottom-4 -right-3 size-12 rounded-full bg-[#ff6a3d] opacity-90 blur-[6px]"></span>
-                            <span class="relative flex items-center gap-[2px] text-[3.5px] font-semibold"><span class="size-[3px] rounded-full bg-[#ff6a3d]"></span>Nova</span>
+                            <span class="absolute -bottom-4 -right-3 size-12 rounded-full bg-[#eb4f2b] opacity-90 blur-[6px]"></span>
+                            <span class="relative flex items-center gap-[2px] text-[3.5px] font-semibold"><span class="size-[3px] rounded-full bg-[#eb4f2b]"></span>Nova</span>
                             <p class="relative mt-[5px] text-[8px] font-semibold leading-none tracking-tight">Series A</p>
                             <p class="relative mt-[2px] text-[3.5px] text-white/60">Investor update · Q4 2026</p>
                           </div>
@@ -135,16 +135,16 @@ const tagColor: Record<string, string> = {
                           <div class="aspect-video w-full overflow-hidden rounded-[3px] bg-[#f6f5f1] px-[5px] py-[4px] text-black">
                             <div class="flex items-baseline justify-between"><span class="text-[4.5px] font-semibold tracking-tight">Revenue</span><span class="text-[3.5px] font-semibold text-[#e5532a]">+182% YoY</span></div>
                             <svg viewBox="0 0 80 30" class="mt-[2px] h-[calc(100%-8px)] w-full" preserveAspectRatio="none" aria-hidden="true">
-                              <defs><linearGradient id="dk-g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ff6a3d" stop-opacity=".35" /><stop offset="1" stop-color="#ff6a3d" stop-opacity="0" /></linearGradient></defs>
+                              <defs><linearGradient id="dk-g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#eb4f2b" stop-opacity=".35" /><stop offset="1" stop-color="#eb4f2b" stop-opacity="0" /></linearGradient></defs>
                               {[8, 16, 24].map((y) => <line x1="0" x2="80" y1={y} y2={y} stroke="#000" stroke-opacity=".08" stroke-width=".5" />)}
                               <path d="M0 26 L13 24 L26 21 L40 22 L53 15 L66 10 L80 3 L80 30 L0 30Z" fill="url(#dk-g)" />
-                              <path d="M0 26 L13 24 L26 21 L40 22 L53 15 L66 10 L80 3" fill="none" stroke="#ff6a3d" stroke-width="1.2" stroke-linejoin="round" />
-                              <circle cx="80" cy="3" r="1.6" fill="#ff6a3d" />
+                              <path d="M0 26 L13 24 L26 21 L40 22 L53 15 L66 10 L80 3" fill="none" stroke="#eb4f2b" stroke-width="1.2" stroke-linejoin="round" />
+                              <circle cx="80" cy="3" r="1.6" fill="#eb4f2b" />
                             </svg>
                           </div>
                         )}
                         {v === 2 && (
-                          <div class="flex aspect-video w-full flex-col justify-between overflow-hidden rounded-[3px] bg-[#ff6a3d] p-[5px] text-black">
+                          <div class="flex aspect-video w-full flex-col justify-between overflow-hidden rounded-[3px] bg-[#eb4f2b] p-[5px] text-black">
                             <div><p class="text-[12px] font-semibold leading-none tracking-tight">3.2×</p><p class="mt-[2px] text-[3.5px] text-black/70">Net revenue retention</p></div>
                             <div class="grid grid-cols-3 gap-[3px] border-t-[0.5px] border-black/25 pt-[2px]">{[['$4.1M', 'ARR'], ['118', 'Clients'], ['9 mo', 'Payback']].map(([n, l]) => <span><span class="block text-[4px] font-semibold leading-none">{n}</span><span class="block text-[2.8px] text-black/60">{l}</span></span>)}</div>
                           </div>
