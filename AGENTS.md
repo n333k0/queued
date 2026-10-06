@@ -1,3 +1,7 @@
+## Copy
+
+Before changing any headline or marketing line, read `COPY.md` (version log, alternates, ICP, roll-back). Log the old line there and tag `copy-vN` before rewriting.
+
 ## Development
 
 When starting the dev server, use background mode:
